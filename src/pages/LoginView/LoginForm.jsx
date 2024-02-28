@@ -15,7 +15,7 @@ function Copyright() {
       <Box
         component="img"
         src={logo}
-        sx={{ width: 200, height: "auto", mt: 2, mb: 1 }} // Adjust margin or padding as needed
+        sx={{ width: 200, height: "auto", mt: 2, mb: 1 }}
         alt="Car Logo"
       />
       <Typography variant="body2" color="text.secondary" align="center">
@@ -33,7 +33,7 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
+      username: data.get("username"),
       password: data.get("password"),
     });
   };

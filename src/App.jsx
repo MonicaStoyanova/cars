@@ -4,7 +4,8 @@ import LoginScreen from "./pages/LoginView/LoginView";
 import { store } from "./store";
 
 import "./App.css";
-import RegisterView from "./pages/RegisterView/RegisterView";
+
+import RegisterScreen from "./pages/RegisterView/RegisterView";
 function App() {
   // auth check
   return (
@@ -12,7 +13,7 @@ function App() {
       <Provider store={store}>
         <Routes>
           <Route path="/login" element={<LoginScreen />} />
-          <Route path="/register" element={<RegisterView />} />
+          <Route path="/register" element={<RegisterScreen />} />
         </Routes>
       </Provider>
     </>
