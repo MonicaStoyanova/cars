@@ -6,16 +6,17 @@ import { store } from "./store";
 import "./App.css";
 
 import RegisterScreen from "./pages/RegisterView/RegisterView";
-import CatalogTable from "./pages/CatalogView/CatalogTable";
+
+import CatalogView from "./pages/CatalogView/CatalogView";
 function App() {
-  // auth check
+  // auth checks
   return (
     <>
       <Provider store={store}>
         <Routes>
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
-          <Route path="/catalog" element={<CatalogTable />} />
+          <Route path="/catalog" element={<CatalogView />} />
         </Routes>
       </Provider>
     </>
