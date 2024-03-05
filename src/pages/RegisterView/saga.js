@@ -2,9 +2,9 @@ import { put, take, call } from "redux-saga/effects";
 
 import { REGISTER_REQUEST } from "./types.js";
 import { registerSuccess, registerError } from "./actions.js";
-import { loginUser } from "../LoginView/actions"; // check the path
+import { loginUser } from "../LoginView/LoginAction.js";
 
-export default function* loginSaga(api) {
+export default function* registerSaga(api) {
   while (true) {
     const registerRequest = yield take(REGISTER_REQUEST);
 
