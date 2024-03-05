@@ -2,12 +2,14 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import logo from "../../resources/cars.png";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -29,13 +31,30 @@ function Copyright() {
 }
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const dispatch = useDispatch();
+  // take the entered username, update the state
+  const onChangeUsername = (event) => {
+    const username = event.target.value; // check if there is a username
+    if (username !== "") setUsername(username);
+  };
+  // take the entered password, update the state
+  const onChangePassword = (event) => {
+    const password = event.target.value;
+    if (password !== "") setPassword(password);
+  };
+  // enable submit button if username and password are present
+  useEffect(() => {
+    if (username && password) setIsDisabled(false);
+  }, [username, password]);
+
+  // on clicking submit, send the collected credentials (which we previously saved in the state) to trigger action
+  const onSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+    dispatch(loginUser(username, password));
   };
 
   return (
@@ -67,7 +86,7 @@ export default function SignIn() {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={onSubmit}
           noValidate
           sx={{ mt: 1, width: "100%" }}
         >
@@ -79,6 +98,8 @@ export default function SignIn() {
             label="Username"
             name="username"
             autoComplete="username"
+            value={username}
+            onChange={onChangeUsername}
             autoFocus
             variant="outlined"
             InputProps={{
@@ -98,6 +119,8 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={onChangePassword}
             variant="outlined"
             InputProps={{
               sx: {
@@ -121,13 +144,14 @@ export default function SignIn() {
                 backgroundColor: "rgb(38, 56, 147)", // hover color
               },
             }}
+            disabled={isDisabled}
           >
             Sign In
           </Button>
           <Grid container direction="column" alignItems="center">
             <Grid item xs>
               <Typography variant="body2">
-                {"Don't have an account?"}
+                <Link to={"/register"}>{"Don't have an account?"}</Link>
               </Typography>
             </Grid>
             <Grid item xs>
