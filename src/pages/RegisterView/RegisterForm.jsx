@@ -1,13 +1,16 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { registerUser } from "./actions";
 
 function Copyright() {
   return (
@@ -20,15 +23,38 @@ function Copyright() {
 }
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const onChangeFirstName = (event) => {
+    setFirstName(event.target.value);
   };
 
+  const onChangeLastName = (event) => {
+    setLastName(event.target.value);
+  };
+
+  const onChangeUsername = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const onChangePassword = (event) => {
+    setPassword(event.target.value);
+  };
+  // enable the button only if all fields are filled out
+  useEffect(() => {
+    if (firstName && lastName && username && password) setIsDisabled = false;
+  }, [firstName, lastName, username, password]);
+
+  const onSubmitRegistration = (event) => {
+    event.preventDefault();
+    dispatch(registerUser(username, password, firstName, lastName));
+  };
   return (
     <Container
       component="main"
@@ -56,7 +82,12 @@ export default function SignUp() {
         <Typography component="h1" variant="h5" fontWeight="bold">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={onSubmitRegistration}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -66,6 +97,8 @@ export default function SignUp() {
                 fullWidth
                 id="firstName"
                 label="First Name"
+                value={firstName}
+                onChange={onChangeFirstName}
                 autoFocus
                 InputProps={{
                   sx: {
@@ -83,6 +116,8 @@ export default function SignUp() {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
+                value={lastName}
+                onChange={onChangeLastName}
                 autoComplete="family-name"
                 InputProps={{
                   sx: {
@@ -101,6 +136,8 @@ export default function SignUp() {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                value={username}
+                onChange={onChangeUsername}
                 InputProps={{
                   sx: {
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -119,6 +156,8 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                value={password}
+                onChange={onChangePassword}
                 InputProps={{
                   sx: {
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -131,6 +170,7 @@ export default function SignUp() {
           </Grid>
           <Button
             type="submit"
+            disabled={isDisabled}
             fullWidth
             variant="contained"
             sx={{
