@@ -1,9 +1,5 @@
 import { combineReducers } from "redux";
-// EXAMPLE
-// import { cartData } from './reducer'
-// import {productData} from './productReducer'
+import { loginReducer } from "./LoginReducer";
 export default combineReducers({
-  // EXAMPLE
-  // cartData,
-  // productData
+  loginReducer,
 });

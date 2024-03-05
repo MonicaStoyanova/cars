@@ -10,6 +10,7 @@ import logo from "../../resources/cars.png";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { loginUser } from "./LoginAction";
 
 function Copyright() {
   return (
@@ -30,7 +31,7 @@ function Copyright() {
   );
 }
 
-export default function SignIn() {
+export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
