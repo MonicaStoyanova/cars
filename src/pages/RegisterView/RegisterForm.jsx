@@ -1,15 +1,16 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+
+import { registerUser } from "./actions";
 
 function Copyright() {
   return (
@@ -26,6 +27,7 @@ export default function SignUp() {
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -44,10 +46,14 @@ export default function SignUp() {
   const onChangePassword = (event) => {
     setPassword(event.target.value);
   };
+  // enable the button only if all fields are filled out
+  useEffect(() => {
+    if (firstName && lastName && username && password) setIsDisabled = false;
+  }, [firstName, lastName, username, password]);
 
   const onSubmitRegistration = (event) => {
     event.preventDefault();
-    dispatch(registerUser(username, password, firstName, lastName)); // import registerUser
+    dispatch(registerUser(username, password, firstName, lastName));
   };
   return (
     <Container
@@ -164,6 +170,7 @@ export default function SignUp() {
           </Grid>
           <Button
             type="submit"
+            disabled={isDisabled}
             fullWidth
             variant="contained"
             sx={{

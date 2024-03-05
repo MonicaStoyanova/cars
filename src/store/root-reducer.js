@@ -1,4 +1,5 @@
 const rootReducers = {
+  registerReducer,
   // Reducers here
   //takes all our application reducers combined in a single reducer, is considered as best practice to keep things clean and clear.
   //example: users: usersReducer,
