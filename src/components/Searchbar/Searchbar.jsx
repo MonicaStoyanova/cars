@@ -6,6 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+import { useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -49,6 +50,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
+  // we will take the user input and filter results based on it
+  const [searchTerm, setSearchTerm] = useState("");
+  // once we have all cars we will filter that array and return matching results and render them
+
+  const updateSearchTerm = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <Box sx={{ flexGrow: 1, bgcolor: "white" }}>
       {" "}
@@ -71,6 +80,8 @@ export default function SearchAppBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              value={searchTerm}
+              onChange={updateSearchTerm}
             />
           </Search>
         </Toolbar>
