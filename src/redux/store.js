@@ -9,6 +9,6 @@ const store = configureStore({
   middleware: () => [sagaMiddleware],
 });
 
-sagaMiddleware.run(); // in the brackets someExampleSaga
+sagaMiddleware.run(rootSaga); // in the brackets someExampleSaga; this is listener/watcher
 
 export default store;

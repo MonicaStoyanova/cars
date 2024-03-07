@@ -1,9 +1,9 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS } from "../pages/LoginView/types";
-
+// initialState in every reducer for readability
 const initialUserState = {
-  loginError: "",
-  currentUser: false,
   isLoggedIn: false,
+  loginError: "",
+  currentUser: false, //this is the username
   userId: null,
   accessToken: null,
 };

@@ -25,6 +25,6 @@ function* authorizeUser(loginApi, username, password) {
     yield put(loginSuccess(user));
     yield localStorage.setItem("user", JSON.stringify(user));
   } catch (err) {
-    yield put(loginError());
+    yield put(loginError()); // put is like dispatch
   }
 }
