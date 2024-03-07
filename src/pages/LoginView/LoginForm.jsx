@@ -34,7 +34,7 @@ function Copyright() {
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true); // state for the submit button
 
   const dispatch = useDispatch();
   // take the entered username, update the state

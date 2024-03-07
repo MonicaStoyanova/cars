@@ -1,8 +1,11 @@
 # Car ads, React + Vite Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The project has Login, Register, Logout functionalities.
+It shows catalog page with cars which can be filtered by a property, or the search bar can be used to show cars that match the search criteria.
 
-Currently, two official plugins are available:
+Users can create, edit or delete entries.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## To start the project:
+
+after installing all dependencies with npm i,
+type npm run dev
