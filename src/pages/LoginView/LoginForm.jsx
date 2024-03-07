@@ -1,4 +1,4 @@
-import * as React from "react";
+// MUI
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -6,11 +6,14 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+// Background image
 import logo from "../../resources/cars.png";
+// React and Redux
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { loginUser } from "./LoginAction";
+
+import { loginRequest } from "./LoginAction";
 
 function Copyright() {
   return (
@@ -55,7 +58,7 @@ export default function LoginForm() {
   // on clicking submit, send the collected credentials (which we previously saved in the state) to trigger action
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(loginUser(username, password));
+    dispatch(loginRequest(username, password));
   };
 
   return (
@@ -156,7 +159,7 @@ export default function LoginForm() {
               </Typography>
             </Grid>
             <Grid item xs>
-              <Link href="/catalog" variant="body2">
+              <Link to={"/"} variant="body2">
                 Continue to catalog
               </Link>
             </Grid>

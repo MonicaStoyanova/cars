@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
-        <Route path="/catalog" element={<CatalogView />} />
+        <Route path="/" element={<CatalogView />} />
       </Routes>
     </>
   );

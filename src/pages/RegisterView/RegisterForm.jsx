@@ -1,14 +1,16 @@
+//MUI
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-
+//React & Redux
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+
+import { Link } from "react-router-dom";
 
 import { registerUser } from "./actions";
 
@@ -30,7 +32,7 @@ export default function SignUp() {
   const [isDisabled, setIsDisabled] = useState(true); // submit button
 
   const dispatch = useDispatch();
-
+  // handle user input
   const onChangeFirstName = (event) => {
     setFirstName(event.target.value);
   };
@@ -48,13 +50,14 @@ export default function SignUp() {
   };
   // enable the button only if all fields are filled out
   useEffect(() => {
-    if (firstName && lastName && username && password) setIsDisabled = false;
+    if (firstName && lastName && username && password) setIsDisabled(false);
   }, [firstName, lastName, username, password]);
 
   const onSubmitRegistration = (event) => {
     event.preventDefault();
-    dispatch(registerUser(username, password, firstName, lastName));
+    dispatch(registerUser(firstName, lastName, username, password));
   };
+
   return (
     <Container
       component="main"
@@ -85,8 +88,8 @@ export default function SignUp() {
         <Box
           component="form"
           noValidate
-          onSubmit={onSubmitRegistration}
           sx={{ mt: 3 }}
+          onSubmit={onSubmitRegistration}
         >
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
@@ -187,7 +190,7 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="center">
             <Grid item sx={{ mb: 1 }}>
-              <Link href="/login" variant="body2">
+              <Link to={"/login"} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
