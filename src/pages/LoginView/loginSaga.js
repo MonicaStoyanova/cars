@@ -23,8 +23,10 @@ function* confirmUser(loginFetch, username, password) {
       firstName: response.user.firstName, // we will need it in order to say Hello, user
       token: response.jwtToken,
     };
+
     yield put(loginSuccess(user));
-    yield localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
+    //window.location = "http://localhost:5173/";
   } catch (err) {
     yield put(loginError(err)); // put is like dispatch
   }

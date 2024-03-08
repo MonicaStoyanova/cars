@@ -4,6 +4,7 @@ import { REGISTER_REQUEST } from "./types.js";
 import { registerSuccess, registerError } from "./actions.js";
 
 export default function* registerSaga(registerFetch) {
+  // listens for reg request
   while (true) {
     const registerRequest = yield take(REGISTER_REQUEST);
 

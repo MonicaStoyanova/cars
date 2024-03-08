@@ -10,8 +10,8 @@ import Container from "@mui/material/Container";
 import logo from "../../resources/cars.png";
 // React and Redux
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
 
@@ -40,6 +40,10 @@ export default function LoginForm() {
   const [isDisabled, setIsDisabled] = useState(true); // state for the submit button
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isLoggedIn = useSelector((state) => state.loginReducer.isLoggedIn);
+
   // take the entered username, update the state
   const onChangeUsername = (event) => {
     const username = event.target.value; // check if there is a username
@@ -54,6 +58,12 @@ export default function LoginForm() {
   useEffect(() => {
     if (username && password) setIsDisabled(false);
   }, [username, password]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
 
   // on clicking submit, send the collected credentials (which we previously saved in the state) to trigger action
   const onSubmit = (event) => {

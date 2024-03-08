@@ -7,6 +7,7 @@ const initialUserState = {
   userId: null,
   accessToken: null,
 };
+
 export const loginReducer = (state = initialUserState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
@@ -14,8 +15,8 @@ export const loginReducer = (state = initialUserState, action) => {
         isLoggedIn: true,
         loginError: "",
         currentUser: action.payload.username,
-        userId: action.payload.userId,
-        accessToken: action.payload.accessToken,
+        userId: action.payload.id,
+        accessToken: action.payload.token,
       };
 
     case LOGIN_ERROR:

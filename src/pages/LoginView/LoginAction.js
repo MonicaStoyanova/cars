@@ -14,12 +14,12 @@ export const loginRequest = (username, password) => {
 };
 
 // if the login is successful, we will need to keep some data in the store
-export const loginSuccess = (id, username, firstName, jwtToken) => {
+export const loginSuccess = ({ id, username, firstName, token }) => {
   // or user?
   // we might need more params like token
   return {
     type: LOGIN_SUCCESS,
-    payload: { id, username, firstName, jwtToken },
+    payload: { id, username, firstName, token },
   };
 };
 
