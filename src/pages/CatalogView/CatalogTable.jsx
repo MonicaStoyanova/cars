@@ -4,8 +4,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import { tableColumns } from "./tableColumns";
 
 const rows = [
-  //response from the BE
-];
+  { id: 1, Make: "Snow", Model: "Jon", Year: 14 },
+  { id: 2, Make: "rrgrd", Model: "Jdrgrdon", Year: 144 },
+  { id: 3, Make: "Snfghow", Model: "Jodrgdn", Year: 414 },
+]; // will come from BE, do they have creatorId ?
 
 const modifiedTableColumns = tableColumns.map((column) => ({
   ...column,
@@ -13,10 +15,10 @@ const modifiedTableColumns = tableColumns.map((column) => ({
 }));
 
 export default function DataGridDemo() {
-  // change the name
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
+        editMode="row"
         rows={rows}
         columns={modifiedTableColumns}
         initialState={{

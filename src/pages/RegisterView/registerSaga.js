@@ -2,9 +2,9 @@ import { put, take, call } from "redux-saga/effects";
 
 import { REGISTER_REQUEST } from "./types.js";
 import { registerSuccess, registerError } from "./actions.js";
-import { loginUser } from "../LoginView/actions"; // check the path
 
-export default function* loginSaga(api) {
+export default function* registerSaga(registerFetch) {
+  // listens for reg request
   while (true) {
     const registerRequest = yield take(REGISTER_REQUEST);
 
@@ -20,7 +20,7 @@ function* createUser(api, username, password, firstName, lastName) {
   let response;
   try {
     response = yield call(
-      api.register,
+      api.register, // or register
       username,
       password,
       firstName,
@@ -32,12 +32,13 @@ function* createUser(api, username, password, firstName, lastName) {
         successResponse.user,
         successResponse.userId,
         successResponse.firstName,
-        successResponse.lastName
+        successResponse.lastName,
+        successResponse.jwtToken
       )
     );
     // if the registration is successful, the user will be logged in immediately, it wont be necessary to to login after registration
     if (response) {
-      yield put(loginUser(username, password));
+      yield put(loginRequest(username, password));
     }
   } catch (error) {
     yield put(registerError(error));
