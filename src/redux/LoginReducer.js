@@ -1,4 +1,5 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS } from "../pages/LoginView/types";
+import { LOGOUT } from "../pages/Logout/types";
 // initialState in every reducer for readability
 const initialUserState = {
   isLoggedIn: false,
@@ -26,6 +27,11 @@ export const loginReducer = (state = initialUserState, action) => {
         isLoggedIn: false,
         userId: null,
         accessToken: null,
+      };
+    case LOGOUT:
+      localStorage.removeItem("user");
+      return {
+        ...initialUserState,
       };
     default:
       return state;
