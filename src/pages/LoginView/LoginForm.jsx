@@ -92,7 +92,7 @@ export default function LoginForm() {
           backgroundColor: "rgba(255, 255, 255, 0.7)",
           padding: 3,
           borderRadius: 1,
-          width: "100%", // Ensures the Box occupies the full width of its parent Container
+          width: "100%",
         }}
       >
         <Typography component="h1" variant="h5" fontWeight="bold">
