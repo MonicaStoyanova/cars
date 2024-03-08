@@ -31,4 +31,53 @@ export const loginFetch = async (username, password) => {
   return await response.json();
 };
 
-/*export const registerFetch */
+// real
+// export const registerFetch = async (
+//   username,
+//   password,
+//   firstName,
+//   lastName
+// ) => {
+//   const response = await fetch(REGISTER_URL, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ username, password, firstName, lastName }),
+//   });
+//   if (!response.ok) {
+//     throw new Error("Registration failed");
+//   }
+//   return await response.json();
+// };
+
+// Mock response for a successful registration
+const mockResponse2 = {
+  id: "someUniqueId",
+  username: "userExample",
+  password: "userPassword",
+  firstName: "John",
+  lastName: "Doe",
+  jwtToken: "token",
+};
+
+// Mock function to simulate fetch
+export const registerFetch = async (
+  username,
+  password,
+  firstName,
+  lastName
+) => {
+  // Simulate a delay to mimic network request
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Check if inputs match expected values for success (for demonstration)
+  if (
+    username !== "" &&
+    password !== "" &&
+    firstName !== "" &&
+    lastName !== ""
+  ) {
+    return mockResponse2;
+  } else {
+    throw new Error("Registration failed"); // Simulate failure if inputs are not as expected
+  }
+};
