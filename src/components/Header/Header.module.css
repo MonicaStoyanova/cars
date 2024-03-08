@@ -13,9 +13,10 @@
     background-color: transparent;
     border: none;
     font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .button a {
     text-decoration: none;
-    ;
 }

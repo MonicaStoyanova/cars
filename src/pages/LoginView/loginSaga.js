@@ -4,7 +4,6 @@ import { put, take, call } from "redux-saga/effects";
 
 // after creating the actions, we have to give them to saga
 export default function* loginSaga(loginFetch) {
-  // where does api comes from ?
   while (true) {
     const loginRequest = yield take(LOGIN_REQUEST); //listens for LOGIN_REQUEST when action loginRequest is triggered, this saga takes over
     if (loginRequest.payload) {
@@ -26,7 +25,6 @@ function* confirmUser(loginFetch, username, password) {
 
     yield put(loginSuccess(user));
     localStorage.setItem("user", JSON.stringify(user));
-    //window.location = "http://localhost:5173/";
   } catch (err) {
     yield put(loginError(err)); // put is like dispatch
   }
