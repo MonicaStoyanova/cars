@@ -16,13 +16,13 @@ function* confirmUser(loginFetch, username, password) {
   // A Generator function, or normal function which either returns a Promise as result, or any other value.
   try {
     const response = yield call(loginFetch, username, password);
+    console.log("in the login saga");
     const user = {
       id: response.user.id,
       username: response.user.username,
       firstName: response.user.firstName, // we will need it in order to say Hello, user
       token: response.jwtToken,
     };
-
     yield put(loginSuccess(user));
     localStorage.setItem("user", JSON.stringify(user));
   } catch (err) {
