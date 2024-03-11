@@ -14,6 +14,7 @@ export function registerUser(firstName, lastName, username, password) {
 
 export function registerSuccess(
   username,
+  password,
   userId,
   firstName,
   lastName,
@@ -23,6 +24,7 @@ export function registerSuccess(
     type: REGISTER_SUCCESS,
     payload: {
       username,
+      password,
       userId,
       firstName,
       lastName,

@@ -22,7 +22,6 @@ function* confirmUser(loginFetch, username, password) {
       firstName: response.user.firstName, // we will need it in order to say Hello, user
       token: response.jwtToken,
     };
-
     yield put(loginSuccess(user));
     localStorage.setItem("user", JSON.stringify(user));
   } catch (err) {

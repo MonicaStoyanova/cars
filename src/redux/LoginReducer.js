@@ -5,7 +5,7 @@ const initialUserState = {
   isLoggedIn: false,
   loginError: "",
   currentUser: false, //this is the username
-  userId: null,
+  userId: "",
   accessToken: null,
 };
 

@@ -8,9 +8,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 //React & Redux
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { registerUser } from "./actions";
 
@@ -32,6 +32,9 @@ export default function SignUp() {
   const [isDisabled, setIsDisabled] = useState(true); // submit button
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isLoggedIn = useSelector((state) => state.registerReducer.isLoggedIn);
   // handle user input
   const onChangeFirstName = (event) => {
     setFirstName(event.target.value);
@@ -57,7 +60,11 @@ export default function SignUp() {
     event.preventDefault();
     dispatch(registerUser(firstName, lastName, username, password));
   };
-
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
   return (
     <Container
       component="main"
