@@ -30,24 +30,11 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true); // submit button
-  console.log(
-    "immediatly after initializing the state " +
-      firstName +
-      " " +
-      lastName +
-      " " +
-      username +
-      " " +
-      password +
-      " " +
-      isDisabled +
-      " "
-  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.registerReducer.isLoggedIn);
-  console.log("is the user logged in when the component renders " + isLoggedIn);
   // handle user input
   const onChangeFirstName = (event) => {
     setFirstName(event.target.value);
@@ -68,26 +55,12 @@ export default function SignUp() {
   useEffect(() => {
     if (firstName && lastName && username && password) setIsDisabled(false);
   }, [firstName, lastName, username, password]);
-  console.log(
-    "after updating with user input the state " +
-      firstName +
-      " " +
-      lastName +
-      " " +
-      username +
-      " " +
-      password +
-      " " +
-      isDisabled +
-      " "
-  );
+
   const onSubmitRegistration = (event) => {
     event.preventDefault();
     dispatch(registerUser(firstName, lastName, username, password));
   };
   useEffect(() => {
-    console.log("navigate to home after register");
-    console.log("IS THE USER LOGGED IN " + isLoggedIn);
     if (isLoggedIn) {
       navigate("/");
     }

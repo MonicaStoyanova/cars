@@ -43,7 +43,6 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.loginReducer.isLoggedIn);
-  console.log("is the user logged in " + isLoggedIn);
 
   // take the entered username, update the state
   const onChangeUsername = (event) => {

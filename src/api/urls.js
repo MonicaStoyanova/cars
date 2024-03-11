@@ -22,13 +22,11 @@ export const registerFetch = async (
   firstName,
   lastName
 ) => {
-  console.log("in register fetch request");
   const response = await fetch(REGISTER_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password, firstName, lastName }),
   });
-  console.log(" in fetch request" + response.id);
   if (!response.ok) {
     throw new Error("Registration failed");
   }
