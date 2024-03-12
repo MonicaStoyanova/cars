@@ -1,9 +1,9 @@
 export const tableColumns = [
-  { field: "Make" },
-  { field: "Model" },
-  { title: "Year", field: "Year", type: "numeric" },
+  { field: "make" },
+  { field: "model" },
+  { title: "Year", field: "year", type: "numeric" },
   {
-    field: "Engine Type",
+    field: "engineType",
     type: "singleSelect",
     valueOptions: [
       { value: "DIESEL", label: "DIESEL" },
@@ -14,7 +14,7 @@ export const tableColumns = [
   },
   {
     title: "Gear Box",
-    field: "Gear Box",
+    field: "gearBox",
     type: "singleSelect",
     valueOptions: [
       { value: "AUTOMATIC", label: "AUTOMATIC" },
@@ -23,19 +23,19 @@ export const tableColumns = [
   },
   {
     title: "Condition",
-    field: "Condition",
+    field: "condition",
     type: "singleSelect",
     valueOptions: [
       { value: "USED", label: "USED" },
       { value: "PARTS", label: "PARTS" },
     ],
   },
-  { title: "Horse Power", field: "Horse Power", type: "numeric" },
-  { title: "Color", field: "Color" },
-  { title: "Price $", field: "Price $", type: "numeric" },
+  { title: "Horse Power", field: "horsePower", type: "numeric" },
+  { title: "Color", field: "color" },
+  { title: "Price $", field: "price", type: "numeric" },
   {
     title: "City",
-    field: "City",
+    field: "city",
     type: "singleSelect",
     valueOptions: [
       { value: "Sofia", label: "Sofia" },
@@ -43,6 +43,6 @@ export const tableColumns = [
       { value: "Plovdiv", label: "Plovdiv" },
     ],
   },
-  { title: "Mileage", field: "Mileage", type: "numeric" },
-  { title: "Extras", field: "Extras" },
+  { title: "Mileage", field: "mileage", type: "numeric" },
+  { title: "Extras", field: "extras" },
 ];
