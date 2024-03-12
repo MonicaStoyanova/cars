@@ -2,7 +2,7 @@ export const BASE_URL = "http://localhost:8080";
 export const LOGIN_URL = `${BASE_URL}/users/login`;
 export const REGISTER_URL = `${BASE_URL}/users/register`;
 export const ALL_CARS = `${BASE_URL}/cars/all`;
-export const CREATE_CAR = `${BASE_URL}/cars`;
+export const CREATE_CAR = `${BASE_URL}/cars/create`;
 export const UPDATE_CAR = `${BASE_URL}/cars/{userId}`; // EDIT
 export const DELETE_CAR = `${BASE_URL}/cars/{id}/{userId}`;
 

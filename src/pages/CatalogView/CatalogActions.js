@@ -14,12 +14,14 @@ import {
 } from "./types";
 // getting all cars
 export function getAllCars() {
+  console.log("in the get all cars request in actions");
   return {
     type: GET_ALL_CARS_REQUEST,
   };
 }
 
 export function getAllCarsSuccess(cars) {
+  console.log("it was successful " + cars);
   return {
     type: GET_ALL_CARS_SUCCESS,
     payload: {

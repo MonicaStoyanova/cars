@@ -41,10 +41,12 @@ function EditToolbar(props) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const { cars } = useSelector((state) => state.getCarsReducer); // we are taking the cars in database
+  const { cars } = useSelector((state) => state.getCarsReducer);
+  console.log(cars); // we are taking the cars in database
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
   const [rows, setRows] = React.useState(cars);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  const [lastSavedRow, setLastSavedRow] = React.useState(null);
 
   // modifying rows
   const handleRowEditStop = (params, event) => {
@@ -80,8 +82,16 @@ export default function FullFeaturedCrudGrid() {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    setLastSavedRow(updatedRow); // Update the last saved row state
     return updatedRow;
   };
+  // checkng the retrieved data from the user
+  React.useEffect(() => {
+    if (lastSavedRow) {
+      console.log("Last saved row:", lastSavedRow);
+      // Perform any action after a row is saved
+    }
+  }, [lastSavedRow]);
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
