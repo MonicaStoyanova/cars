@@ -17,7 +17,10 @@ import { randomId } from "@mui/x-data-grid-generator";
 import { useSelector } from "react-redux";
 
 function EditToolbar(props) {
+  const { isLoggedIn } = useSelector((state) => state.loginReducer);
   const { setRows, setRowModesModel } = props;
+
+  if (!isLoggedIn) return null; // If not logged in, don't render add record
 
   const handleClick = () => {
     const id = randomId();
@@ -38,10 +41,12 @@ function EditToolbar(props) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const { cars } = useSelector((state) => state.getCarsReducer);
+  const { cars } = useSelector((state) => state.getCarsReducer); // we are taking the cars in database
+  const { isLoggedIn } = useSelector((state) => state.loginReducer);
   const [rows, setRows] = React.useState(cars);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
+  // modifying rows
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -154,37 +159,39 @@ export default function FullFeaturedCrudGrid() {
       headerName: "Actions",
       width: 100,
       getActions: (params) => [
-        rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
-          <React.Fragment>
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              onClick={handleSaveClick(params.id)}
-              color="inherit"
-            />
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              onClick={handleCancelClick(params.id)}
-              color="inherit"
-            />
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <GridActionsCellItem
-              icon={<EditIcon />}
-              label="Edit"
-              onClick={handleEditClick(params.id)}
-              color="inherit"
-            />
-            <GridActionsCellItem
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={handleDeleteClick(params.id)}
-              color="inherit"
-            />
-          </React.Fragment>
-        ),
+        isLoggedIn ? (
+          rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
+            <React.Fragment>
+              <GridActionsCellItem
+                icon={<SaveIcon />}
+                label="Save"
+                onClick={handleSaveClick(params.id)}
+                color="inherit"
+              />
+              <GridActionsCellItem
+                icon={<CancelIcon />}
+                label="Cancel"
+                onClick={handleCancelClick(params.id)}
+                color="inherit"
+              />
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                onClick={handleEditClick(params.id)}
+                color="inherit"
+              />
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={handleDeleteClick(params.id)}
+                color="inherit"
+              />
+            </React.Fragment>
+          )
+        ) : null, // If not logged in, don't show edit/delete actions
       ],
     },
   ];
@@ -211,7 +218,7 @@ export default function FullFeaturedCrudGrid() {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         components={{
-          Toolbar: EditToolbar,
+          Toolbar: isLoggedIn ? EditToolbar : null,
         }}
         componentsProps={{
           toolbar: { setRows, setRowModesModel },
