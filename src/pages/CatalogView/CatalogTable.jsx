@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -17,18 +16,19 @@ import { randomId } from "@mui/x-data-grid-generator";
 
 import { useSelector, useDispatch } from "react-redux";
 import { createCar } from "./CatalogActions";
+import { useState, useEffect } from "react";
 
-function EditToolbar(props) {
+function AddNewRecordToolbar(props) {
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
-  const { newRow, setNewRow } = props; // when we click add record the row that appears to insert values
+  const { newRecordRow, setNewRecordRow } = props; // when we click add record the row that appears to insert values
 
   if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
 
   // Handles adding the new record to the table
   const handleAddNewRecord = () => {
     const id = randomId(); // creates random id for the new entry
-    newRow((oldRows) => [...oldRows, { id, isNew: true }]);
-    setNewRow((oldModel) => ({
+    newRecordRow((oldRows) => [...oldRows, { id, isNew: true }]);
+    setNewRecordRow((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "Make" },
     }));
@@ -52,14 +52,14 @@ export default function FullFeaturedCrudGrid() {
   const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
     useSelector((state) => state.loginReducer); // to conditionally render actions
 
-  const [rows, newRow] = React.useState(cars); // the cars
-  const [rowModesModel, setNewRow] = React.useState({});
-  const [lastSavedRow, setLastSavedRow] = React.useState(null);
+  const [rows, newRecordRow] = useState(cars); // the cars
+  const [rowModesModel, setNewRecordRow] = useState({});
+  const [lastSavedRow, setLastSavedRow] = useState(null);
 
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    newRow(cars); // Update the rows state with the cars data
+  useEffect(() => {
+    newRecordRow(cars); // Update the rows state with the cars data
   }, [cars]); // This effect runs whenever the `cars` data changes which means that we might not need it, if we wish to not show the just added records
 
   // modifying rows
@@ -70,30 +70,30 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleEditClick = (id) => () => {
-    setNewRow({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setNewRecordRow({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
-    setNewRow({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setNewRecordRow({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const handleDeleteClick = (id) => () => {
-    newRow(rows.filter((row) => row.id !== id));
+    newRecordRow(rows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
-    setNewRow({
+    setNewRecordRow({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
     const editedRow = rows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      newRow(rows.filter((row) => row.id !== id));
+      newRecordRow(rows.filter((row) => row.id !== id));
     }
   };
   // Logic for getting user input when new record is added
-  const processRowUpdate = (newRowData) => {
+  const processRowUpdate = async (newRowData) => {
     // List of required fields
     const requiredFields = [
       "make",
@@ -128,13 +128,13 @@ export default function FullFeaturedCrudGrid() {
     const updatedRows = rows.map((row) =>
       row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
     );
-    newRow(updatedRows); // Correctly update the state
+    newRecordRow(updatedRows); // Correctly update the state
     setLastSavedRow(newRowData); // Update the last saved row state
     return newRowData;
   };
 
   // Preparing the retrieved data for dispatch
-  React.useEffect(() => {
+  useEffect(() => {
     if (lastSavedRow) {
       const carDetails = {
         ...lastSavedRow,
@@ -151,7 +151,7 @@ export default function FullFeaturedCrudGrid() {
   }, [lastSavedRow]);
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    setNewRow(newRowModesModel);
+    setNewRecordRow(newRowModesModel);
   };
 
   const columns = [
@@ -162,7 +162,7 @@ export default function FullFeaturedCrudGrid() {
       field: "year",
       headerName: "Year",
       type: "number",
-      width: 110,
+      width: 100,
       editable: true,
     },
     {
@@ -228,7 +228,7 @@ export default function FullFeaturedCrudGrid() {
       getActions: (params) => [
         isLoggedIn ? (
           rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
-            <React.Fragment>
+            <>
               <GridActionsCellItem
                 icon={<SaveIcon />}
                 label="Save"
@@ -241,9 +241,9 @@ export default function FullFeaturedCrudGrid() {
                 onClick={handleCancelClick(params.id)}
                 color="inherit"
               />
-            </React.Fragment>
+            </>
           ) : (
-            <React.Fragment>
+            <>
               <GridActionsCellItem
                 icon={<EditIcon />}
                 label="Edit"
@@ -256,7 +256,7 @@ export default function FullFeaturedCrudGrid() {
                 onClick={handleDeleteClick(params.id)}
                 color="inherit"
               />
-            </React.Fragment>
+            </>
           )
         ) : null, // If not logged in, don't show edit/delete actions
       ],
@@ -285,10 +285,10 @@ export default function FullFeaturedCrudGrid() {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         components={{
-          Toolbar: isLoggedIn ? EditToolbar : null,
+          Toolbar: isLoggedIn ? AddNewRecordToolbar : null,
         }}
         componentsProps={{
-          toolbar: { newRow, setNewRow },
+          toolbar: { newRecordRow, setNewRecordRow },
         }}
       />
     </Box>
