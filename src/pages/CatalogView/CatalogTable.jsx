@@ -94,6 +94,37 @@ export default function FullFeaturedCrudGrid() {
   };
   // Logic for getting user input when new record is added
   const processRowUpdate = (newRowData) => {
+    // List of required fields
+    const requiredFields = [
+      "make",
+      "model",
+      "year",
+      "engineType",
+      "gearBox",
+      "condition",
+      "horsePower",
+      "color",
+      "price",
+      "city",
+      "mileage",
+      "extras",
+    ];
+
+    // Check if all required fields are filled
+    const allFieldsFilled = requiredFields.every(
+      (field) =>
+        newRowData[field] !== undefined &&
+        newRowData[field] !== "" &&
+        newRowData[field] !== null
+    );
+
+    if (!allFieldsFilled) {
+      // If not all fields are filled, alert the user and do not proceed with saving
+      alert("Please fill out all fields before saving.");
+      return newRowData; // Return the data without proceeding to avoid saving incomplete data
+    }
+
+    // If all fields are filled, proceed with updating the rows and dispatching the action
     const updatedRows = rows.map((row) =>
       row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
     );
@@ -102,7 +133,7 @@ export default function FullFeaturedCrudGrid() {
     return newRowData;
   };
 
-  // Checking the retrieved data from the user
+  // Preparing the retrieved data for dispatch
   React.useEffect(() => {
     if (lastSavedRow) {
       const carDetails = {
