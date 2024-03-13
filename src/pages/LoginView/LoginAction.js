@@ -6,10 +6,17 @@ export const loginRequest = (username, password) => {
 };
 
 // if the login is successful, we will need to keep some data in the store
-export const loginSuccess = ({ id, username, firstName, token }) => {
+export const loginSuccess = ({
+  id,
+  username,
+  firstName,
+  lastName,
+  password,
+  token,
+}) => {
   return {
     type: LOGIN_SUCCESS,
-    payload: { id, username, firstName, token },
+    payload: { id, username, firstName, lastName, password, token },
   };
 };
 

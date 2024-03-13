@@ -5,6 +5,9 @@ const initialUserState = {
   isLoggedIn: false,
   loginError: "",
   currentUser: false, //this is the username
+  password: null,
+  firstName: "",
+  lastName: "",
   userId: "",
   accessToken: null,
 };
@@ -16,6 +19,9 @@ export const loginReducer = (state = initialUserState, action) => {
         isLoggedIn: true,
         loginError: "",
         currentUser: action.payload.username,
+        password: action.payload.password,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
         userId: action.payload.id,
         accessToken: action.payload.token,
       };

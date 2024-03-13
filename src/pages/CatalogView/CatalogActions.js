@@ -12,16 +12,15 @@ import {
   DELETE_CAR_SUCCESS,
   DELETE_CAR_ERROR,
 } from "./types";
+
 // getting all cars
 export function getAllCars() {
-  console.log("in the get all cars request in actions");
   return {
     type: GET_ALL_CARS_REQUEST,
   };
 }
 
 export function getAllCarsSuccess(cars) {
-  console.log("it was successful " + cars);
   return {
     type: GET_ALL_CARS_SUCCESS,
     payload: {
@@ -37,42 +36,10 @@ export function getAllCarsError(errorMessage) {
 }
 
 // create car
-export function createCar(
-  accessToken,
-  city,
-  color,
-  condition,
-  engineType,
-  extras,
-  gearBox,
-  horsePower,
-  id,
-  make,
-  mileage,
-  model,
-  price,
-  user,
-  year
-) {
+export function createCar(carDetails) {
   return {
     type: CREATE_CAR_REQUEST,
-    payload: {
-      accessToken,
-      city,
-      color,
-      condition,
-      engineType,
-      extras,
-      gearBox,
-      horsePower,
-      id,
-      make,
-      mileage,
-      model,
-      price,
-      user,
-      year,
-    },
+    payload: carDetails,
   };
 }
 

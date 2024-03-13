@@ -14,18 +14,21 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
-import { useSelector } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
+import { createCar } from "./CatalogActions";
 
 function EditToolbar(props) {
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
-  const { setRows, setRowModesModel } = props;
+  const { newRow, setNewRow } = props; // when we click add record the row that appears to insert values
 
-  if (!isLoggedIn) return null; // If not logged in, don't render add record
+  if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
 
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, isNew: true }]);
-    setRowModesModel((oldModel) => ({
+  // Handles adding the new record to the table
+  const handleAddNewRecord = () => {
+    const id = randomId(); // creates random id for the new entry
+    newRow((oldRows) => [...oldRows, { id, isNew: true }]);
+    setNewRow((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "Make" },
     }));
@@ -33,7 +36,11 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      <Button
+        color="primary"
+        startIcon={<AddIcon />}
+        onClick={handleAddNewRecord}
+      >
         Add record
       </Button>
     </GridToolbarContainer>
@@ -41,12 +48,19 @@ function EditToolbar(props) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const { cars } = useSelector((state) => state.getCarsReducer);
-  console.log(cars); // we are taking the cars in database
-  const { isLoggedIn } = useSelector((state) => state.loginReducer);
-  const [rows, setRows] = React.useState(cars);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const { cars } = useSelector((state) => state.getCarsReducer); // we are taking the cars from the  database
+  const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
+    useSelector((state) => state.loginReducer); // to conditionally render actions
+
+  const [rows, newRow] = React.useState(cars); // the cars
+  const [rowModesModel, setNewRow] = React.useState({});
   const [lastSavedRow, setLastSavedRow] = React.useState(null);
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    newRow(cars); // Update the rows state with the cars data
+  }, [cars]); // This effect runs whenever the `cars` data changes which means that we might not need it, if we wish to not show the just added records
 
   // modifying rows
   const handleRowEditStop = (params, event) => {
@@ -56,60 +70,72 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setNewRow({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setNewRow({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    newRow(rows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
-    setRowModesModel({
+    setNewRow({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
     const editedRow = rows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      newRow(rows.filter((row) => row.id !== id));
     }
   };
-
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    setLastSavedRow(updatedRow); // Update the last saved row state
-    return updatedRow;
+  // Logic for getting user input when new record is added
+  const processRowUpdate = (newRowData) => {
+    const updatedRows = rows.map((row) =>
+      row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
+    );
+    newRow(updatedRows); // Correctly update the state
+    setLastSavedRow(newRowData); // Update the last saved row state
+    return newRowData;
   };
-  // checkng the retrieved data from the user
+
+  // Checking the retrieved data from the user
   React.useEffect(() => {
     if (lastSavedRow) {
-      console.log("Last saved row:", lastSavedRow);
-      // Perform any action after a row is saved
+      const carDetails = {
+        ...lastSavedRow,
+        user: {
+          id: userId,
+          username: currentUser,
+          password,
+          firstName,
+          lastName,
+        },
+      };
+      dispatch(createCar(carDetails));
     }
   }, [lastSavedRow]);
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
+    setNewRow(newRowModesModel);
   };
 
   const columns = [
     { field: "id", headerName: "ID", width: 90, hide: true },
-    { field: "Make", headerName: "Make", width: 150, editable: true },
-    { field: "Model", headerName: "Model", width: 150, editable: true },
+    { field: "make", headerName: "Make", width: 150, editable: true },
+    { field: "model", headerName: "Model", width: 150, editable: true },
     {
-      field: "Year",
+      field: "year",
       headerName: "Year",
       type: "number",
       width: 110,
       editable: true,
     },
     {
-      field: "Engine Type",
+      field: "engineType",
       headerName: "Engine Type",
       width: 160,
       type: "singleSelect",
@@ -117,7 +143,7 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: "Gear Box",
+      field: "gearBox",
       headerName: "Gear Box",
       width: 160,
       type: "singleSelect",
@@ -125,7 +151,7 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: "Condition",
+      field: "condition",
       headerName: "Condition",
       width: 160,
       type: "singleSelect",
@@ -133,22 +159,22 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: "Horse Power",
+      field: "horsePower",
       headerName: "Horse Power",
       type: "number",
       width: 130,
       editable: true,
     },
-    { field: "Color", headerName: "Color", width: 130, editable: true },
+    { field: "color", headerName: "Color", width: 130, editable: true },
     {
-      field: "Price $",
+      field: "price",
       headerName: "Price",
       type: "number",
       width: 130,
       editable: true,
     },
     {
-      field: "City",
+      field: "city",
       headerName: "City",
       width: 130,
       type: "singleSelect",
@@ -156,13 +182,13 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: "Mileage",
+      field: "mileage",
       headerName: "Mileage",
       type: "number",
       width: 130,
       editable: true,
     },
-    { field: "Extras", headerName: "Extras", width: 200, editable: true },
+    { field: "extras", headerName: "Extras", width: 200, editable: true },
     {
       field: "actions",
       type: "actions",
@@ -231,7 +257,7 @@ export default function FullFeaturedCrudGrid() {
           Toolbar: isLoggedIn ? EditToolbar : null,
         }}
         componentsProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { newRow, setNewRow },
         }}
       />
     </Box>

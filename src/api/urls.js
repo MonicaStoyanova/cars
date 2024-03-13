@@ -53,7 +53,6 @@ export const fetchAllCars = async () => {
 };
 
 export const createCarFetch = async (carDetails) => {
-  //change carDetails
   const response = await fetch(CREATE_CAR, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

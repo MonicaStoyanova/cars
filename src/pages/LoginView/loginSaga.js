@@ -19,7 +19,9 @@ function* confirmUser(loginFetch, username, password) {
     const user = {
       id: response.user.id,
       username: response.user.username,
-      firstName: response.user.firstName, // we will need it in order to say Hello, user
+      firstName: response.user.firstName,
+      lastName: response.user.lastName,
+      password: response.user.password,
       token: response.jwtToken,
     };
     yield put(loginSuccess(user));

@@ -9,7 +9,6 @@ const CatalogView = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("Dispatching the actions to get all cars once in Catalog View");
     dispatch(getAllCars());
   }, []);
   return (
