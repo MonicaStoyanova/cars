@@ -1,23 +1,21 @@
 import { put, take, call } from "redux-saga/effects";
 import { DELETE_CAR_REQUEST } from "./types";
 import { deleteCarError, deleteCarSuccess } from "./CatalogActions";
+import { deleteCarFetch } from "../../api/urls";
 
-export default function* removeCarSaga(deleteCarFetch) {
+export default function* deleteCarSaga() {
   while (true) {
-    const removeCarRequest = yield take(DELETE_CAR_REQUEST);
-    if (removeCarRequest.payload) {
-      const { carId, userId, accessToken } = removeCarRequest.payload;
-      yield call(removeCar, deleteCarFetch, carId, userId, accessToken);
-    }
+    const { payload } = yield take(DELETE_CAR_REQUEST);
+    const { carId, userId } = payload;
+    yield call(removeCar, carId, userId);
   }
 }
 
-function* removeCar(deleteCarFetch, carId, userId, accessToken) {
-  let response;
+function* removeCar(carId, userId) {
   try {
-    response = yield call(deleteCarFetch, carId, userId, accessToken);
+    const response = yield call(deleteCarFetch, carId, userId);
     yield put(deleteCarSuccess(response.data));
   } catch (error) {
-    yield put(deleteCarError(error));
+    yield put(deleteCarError(error.toString()));
   }
 }

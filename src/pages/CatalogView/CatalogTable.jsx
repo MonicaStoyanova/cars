@@ -15,7 +15,7 @@ import {
 import { randomId } from "@mui/x-data-grid-generator";
 
 import { useSelector, useDispatch } from "react-redux";
-import { createCar } from "./CatalogActions";
+import { createCar, deleteCar } from "./CatalogActions";
 import { useState, useEffect } from "react";
 
 function AddNewRecordToolbar(props) {
@@ -78,6 +78,7 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleDeleteClick = (id) => () => {
+    dispatch(deleteCar(id, userId));
     newRecordRow(rows.filter((row) => row.id !== id));
   };
 

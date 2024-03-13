@@ -118,13 +118,12 @@ export function editCarError(errorMessage) {
 }
 
 // delete car
-export function deleteCar(carId, userId, accessToken) {
+export function deleteCar(carId, userId) {
   return {
     type: DELETE_CAR_REQUEST,
     payload: {
       carId,
       userId,
-      accessToken,
     },
   };
 }
