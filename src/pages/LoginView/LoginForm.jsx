@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
+import { useAuth } from "../../hooks/useAuth";
+
+useAuth();
 
 function Copyright() {
   return (

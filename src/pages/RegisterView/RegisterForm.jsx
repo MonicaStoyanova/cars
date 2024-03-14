@@ -13,7 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { registerUser } from "./actions";
+import useAuth from "../../hooks/useAuth";
 
+useAuth();
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
