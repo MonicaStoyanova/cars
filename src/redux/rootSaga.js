@@ -20,6 +20,7 @@ function* rootSaga() {
     getAllCarsSaga(fetchAllCars),
     createCarSaga(createCarFetch),
     deleteCarSaga(deleteCarFetch),
+    //editCarSaga(editCarFetch),
   ]);
 }
 export default rootSaga;

@@ -5,18 +5,42 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import Pagination from "@mui/material/Pagination";
 import {
-  GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
-  GridRowEditStopReasons,
+  GridRowModes,
+  useGridApiContext,
+  useGridSelector,
+  gridPageCountSelector,
+  gridPageSelector,
+  GridPagination,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 
 import { useSelector, useDispatch } from "react-redux";
 import { createCar, deleteCar } from "./CatalogActions";
 import { useState, useEffect } from "react";
+
+function CustomPagination(props) {
+  const apiRef = useGridApiContext();
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+  const page = useGridSelector(apiRef, gridPageSelector);
+
+  const handleChange = (event, value) => {
+    apiRef.current.setPage(value - 1); // setPage expects a zero-based index
+  };
+
+  return (
+    <Pagination
+      color="primary"
+      count={pageCount}
+      page={page + 1} // Convert zero-based index to one-based for the Pagination component
+      onChange={handleChange}
+    />
+  );
+}
 
 function AddNewRecordToolbar(props) {
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
@@ -285,10 +309,15 @@ export default function FullFeaturedCrudGrid() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        components={{
-          Toolbar: isLoggedIn ? AddNewRecordToolbar : null,
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        s
+        pagination
+        slots={{
+          toolbar: isLoggedIn ? AddNewRecordToolbar : null,
+          pagination: CustomPagination,
         }}
-        componentsProps={{
+        slotProps={{
           toolbar: { newRecordRow, setNewRecordRow },
         }}
       />
