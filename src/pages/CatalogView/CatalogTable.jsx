@@ -26,7 +26,7 @@ function AddNewRecordToolbar(props) {
   // Handles adding the new record to the table
   const handleAddNewRecord = () => {
     const id = randomId(); // creates random id for the new entry
-    setCarRows((oldRows) => [...oldRows, { id, isNew: true }]);
+    setCarRows((oldRows) => [{ id, isNew: true }, ...oldRows]); // when typing the new record entry will be on top not bottom
     setNewRecordRow((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "Make" },
@@ -51,7 +51,7 @@ export default function FullFeaturedCrudGrid() {
   const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
     useSelector((state) => state.loginReducer); // to conditionally render actions
 
-  const [carRows, setCarRows] = useState(cars); // the cars
+  const [carRows, setCarRows] = useState(cars); // the initial cars record from DB
   const [rowModesModel, setNewRecordRow] = useState({});
   const [lastSavedRow, setLastSavedRow] = useState(null);
 
