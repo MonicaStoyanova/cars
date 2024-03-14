@@ -5,17 +5,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import Pagination from "@mui/material/Pagination";
 import {
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowModes,
-  useGridApiContext,
-  useGridSelector,
-  gridPageCountSelector,
-  gridPageSelector,
-  GridPagination,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 
@@ -23,35 +17,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { createCar, deleteCar } from "./CatalogActions";
 import { useState, useEffect } from "react";
 
-function CustomPagination(props) {
-  const apiRef = useGridApiContext();
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-  const page = useGridSelector(apiRef, gridPageSelector);
-
-  const handleChange = (event, value) => {
-    apiRef.current.setPage(value - 1); // setPage expects a zero-based index
-  };
-
-  return (
-    <Pagination
-      color="primary"
-      count={pageCount}
-      page={page + 1} // Convert zero-based index to one-based for the Pagination component
-      onChange={handleChange}
-    />
-  );
-}
-
 function AddNewRecordToolbar(props) {
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
-  const { newRecordRow, setNewRecordRow } = props; // when we click add record the row that appears to insert values
+  const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
 
   if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
 
   // Handles adding the new record to the table
   const handleAddNewRecord = () => {
     const id = randomId(); // creates random id for the new entry
-    newRecordRow((oldRows) => [...oldRows, { id, isNew: true }]);
+    setCarRows((oldRows) => [...oldRows, { id, isNew: true }]);
     setNewRecordRow((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "Make" },
@@ -76,17 +51,17 @@ export default function FullFeaturedCrudGrid() {
   const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
     useSelector((state) => state.loginReducer); // to conditionally render actions
 
-  const [rows, newRecordRow] = useState(cars); // the cars
+  const [carRows, setCarRows] = useState(cars); // the cars
   const [rowModesModel, setNewRecordRow] = useState({});
   const [lastSavedRow, setLastSavedRow] = useState(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    newRecordRow(cars); // Update the rows state with the cars data
+    setCarRows(cars); // Update the carRows state with the cars data
   }, [cars]); // This effect runs whenever the `cars` data changes which means that we might not need it, if we wish to not show the just added records
 
-  // modifying rows
+  // modifying carRows
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -103,7 +78,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleDeleteClick = (id) => () => {
     dispatch(deleteCar(id, userId));
-    newRecordRow(rows.filter((row) => row.id !== id));
+    setCarRows(carRows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
@@ -112,9 +87,9 @@ export default function FullFeaturedCrudGrid() {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
+    const editedRow = carRows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      newRecordRow(rows.filter((row) => row.id !== id));
+      setCarRows(carRows.filter((row) => row.id !== id));
     }
   };
   // Logic for getting user input when new record is added
@@ -149,11 +124,11 @@ export default function FullFeaturedCrudGrid() {
       return newRowData; // Return the data without proceeding to avoid saving incomplete data
     }
 
-    // If all fields are filled, proceed with updating the rows and dispatching the action
-    const updatedRows = rows.map((row) =>
+    // If all fields are filled, proceed with updating the carRows and dispatching the action
+    const updatedRows = carRows.map((row) =>
       row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
     );
-    newRecordRow(updatedRows); // Correctly update the state
+    setCarRows(updatedRows); // Correctly update the state
     setLastSavedRow(newRowData); // Update the last saved row state
     return newRowData;
   };
@@ -302,23 +277,22 @@ export default function FullFeaturedCrudGrid() {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={carRows}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        s
-        pagination
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
         slots={{
           toolbar: isLoggedIn ? AddNewRecordToolbar : null,
-          pagination: CustomPagination,
         }}
         slotProps={{
-          toolbar: { newRecordRow, setNewRecordRow },
+          toolbar: { setCarRows, setNewRecordRow },
         }}
       />
     </Box>
