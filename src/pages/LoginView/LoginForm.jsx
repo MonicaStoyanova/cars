@@ -14,9 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
-import { useAuth } from "../../hooks/useAuth";
-
-useAuth();
+import useAuthRedirect from "../../hooks/useAuth";
 
 function Copyright() {
   return (
@@ -38,6 +36,7 @@ function Copyright() {
 }
 
 export default function LoginForm() {
+  useAuthRedirect();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true); // state for the submit button
