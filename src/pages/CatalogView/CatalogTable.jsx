@@ -129,8 +129,7 @@ export default function FullFeaturedCrudGrid() {
 
     if (!allFieldsFilled) {
       // If not all fields are filled, alert the user and do not proceed with saving
-      alert("Please fill out all fields before saving.");
-      return newRowData; // Return the data without proceeding to avoid saving incomplete data
+      return alert("Please fill out all fields before saving.");
     }
 
     // If all fields are filled, proceed with updating the carRows and dispatching the action
@@ -229,47 +228,49 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     { field: "extras", headerName: "Extras", width: 200, editable: true },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
-      width: 100,
-      getActions: (params) => [
-        isLoggedIn ? (
-          rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
-            <>
-              <GridActionsCellItem
-                icon={<SaveIcon />}
-                label="Save"
-                onClick={handleSaveClick(params.id)}
-                color="inherit"
-              />
-              <GridActionsCellItem
-                icon={<CancelIcon />}
-                label="Cancel"
-                onClick={handleCancelClick(params.id)}
-                color="inherit"
-              />
-            </>
-          ) : (
-            <>
-              <GridActionsCellItem
-                icon={<EditIcon />}
-                label="Edit"
-                onClick={handleEditClick(params.id)}
-                color="inherit"
-              />
-              <GridActionsCellItem
-                icon={<DeleteIcon />}
-                label="Delete"
-                onClick={handleDeleteClick(params.id)}
-                color="inherit"
-              />
-            </>
-          )
-        ) : null, // If not logged in, don't show edit/delete actions
-      ],
-    },
+    ...(isLoggedIn // conditionally show actions for logged in user only
+      ? [
+          {
+            field: "actions",
+            type: "actions",
+            headerName: "Actions",
+            width: 100,
+            getActions: (params) => [
+              rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
+                <>
+                  <GridActionsCellItem
+                    icon={<SaveIcon />}
+                    label="Save"
+                    onClick={handleSaveClick(params.id)}
+                    color="inherit"
+                  />
+                  <GridActionsCellItem
+                    icon={<CancelIcon />}
+                    label="Cancel"
+                    onClick={handleCancelClick(params.id)}
+                    color="inherit"
+                  />
+                </>
+              ) : (
+                <>
+                  <GridActionsCellItem
+                    icon={<EditIcon />}
+                    label="Edit"
+                    onClick={handleEditClick(params.id)}
+                    color="inherit"
+                  />
+                  <GridActionsCellItem
+                    icon={<DeleteIcon />}
+                    label="Delete"
+                    onClick={handleDeleteClick(params.id)}
+                    color="inherit"
+                  />
+                </>
+              ),
+            ],
+          },
+        ]
+      : []),
   ];
 
   return (
