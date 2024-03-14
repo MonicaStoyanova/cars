@@ -47,19 +47,28 @@ function AddNewRecordToolbar(props) {
 }
 
 export default function FullFeaturedCrudGrid() {
+  // we want the array of cars to appear as follows, top to be the users adds first
   const { cars } = useSelector((state) => state.getCarsReducer); // we are taking the cars from the  database
   const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
     useSelector((state) => state.loginReducer); // to conditionally render actions
 
-  const [carRows, setCarRows] = useState(cars); // the initial cars record from DB
-  const [rowModesModel, setNewRecordRow] = useState({});
+  const [carRows, setCarRows] = useState([]); // the initial cars record from DB
+  const [rowModesModel, setNewRecordRow] = useState({}); //  lets you specify which rows are in "edit mode" and which are not, directly through the model
   const [lastSavedRow, setLastSavedRow] = useState(null);
 
   const dispatch = useDispatch();
-
   useEffect(() => {
-    setCarRows(cars); // Update the carRows state with the cars data
-  }, [cars]); // This effect runs whenever the `cars` data changes which means that we might not need it, if we wish to not show the just added records
+    const sortedCars = [...cars].sort((a, b) => {
+      const isAUser = a.user.id === userId;
+      const isBUser = b.user.id === userId;
+      if (isAUser === isBUser) {
+        return 0; // Keep original order if both or neither are the logged-in user
+      }
+      return isAUser ? -1 : 1; // Prioritize the logged-in user's cars
+    });
+
+    setCarRows(sortedCars);
+  }, [cars, userId]);
 
   // modifying carRows
   const handleRowEditStop = (params, event) => {
@@ -78,7 +87,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleDeleteClick = (id) => () => {
     dispatch(deleteCar(id, userId));
-    setCarRows(carRows.filter((row) => row.id !== id));
+    setCarRows(cars.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
@@ -125,7 +134,7 @@ export default function FullFeaturedCrudGrid() {
     }
 
     // If all fields are filled, proceed with updating the carRows and dispatching the action
-    const updatedRows = carRows.map((row) =>
+    const updatedRows = cars.map((row) =>
       row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
     );
     setCarRows(updatedRows); // Correctly update the state
