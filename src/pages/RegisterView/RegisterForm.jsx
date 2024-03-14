@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { registerUser } from "./actions";
-import useAuthRedirect from "../../hooks/useAuth";
+import useAuthRedirect from "../../hooks/useAuthRedirect";
 
 function Copyright() {
   return (
