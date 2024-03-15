@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Header from "../../components/Header/Header";
 import DataGridDemo from "./CatalogTable";
-import SearchAppBar from "../../components/Searchbar/Searchbar";
+
 import { useDispatch } from "react-redux";
 import { getAllCars } from "./CatalogActions";
 
@@ -14,7 +14,7 @@ const CatalogView = () => {
   return (
     <>
       <Header />
-      <SearchAppBar />
+
       <DataGridDemo />
     </>
   );

@@ -8,6 +8,7 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   DataGrid,
   GridToolbarContainer,
+  GridToolbarQuickFilter,
   GridActionsCellItem,
   GridRowModes,
   GridRowEditStopReasons,
@@ -33,13 +34,18 @@ function AddNewRecordToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={handleAddNewRecord}
+      <Box
+        sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
-        Add record
-      </Button>
+        <Button
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAddNewRecord}
+        >
+          Add record
+        </Button>
+        <GridToolbarQuickFilter />{" "}
+      </Box>
     </GridToolbarContainer>
   );
 }
