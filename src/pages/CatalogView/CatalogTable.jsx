@@ -45,16 +45,16 @@ function AddNewRecordToolbar(props) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  // we want the array of cars to appear as follows, top to be the users adds first
-  const { cars } = useSelector((state) => state.getCarsReducer); // we are taking the cars from the  database
+  const { cars } = useSelector((state) => state.getCarsReducer);
   const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
-    useSelector((state) => state.loginReducer); // to conditionally render actions
+    useSelector((state) => state.loginReducer);
 
-  const [carRows, setCarRows] = useState([]); // the initial cars record from DB
+  const [carRows, setCarRows] = useState([]); // cars from DB
   const [rowModesModel, setNewRecordRow] = useState({}); //  lets you specify which rows are in "edit mode" and which are not, directly through the model
   const [lastSavedRow, setLastSavedRow] = useState(null);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     const sortedCars = [...cars].sort((a, b) => {
       const isAUser = a.user.id === userId;
@@ -101,7 +101,6 @@ export default function FullFeaturedCrudGrid() {
   };
   // Logic for getting user input when new record is added
   const processRowUpdate = async (newRowData) => {
-    // List of required fields
     const requiredFields = [
       "make",
       "model",
@@ -126,16 +125,15 @@ export default function FullFeaturedCrudGrid() {
     );
 
     if (!allFieldsFilled) {
-      // If not all fields are filled, alert the user and do not proceed with saving
       return alert("Please fill out all fields before saving.");
     }
 
     // If all fields are filled, proceed with updating the carRows and dispatching the action
-    const updatedRows = cars.map((row) =>
+    const updatedRows = carRows.map((row) =>
       row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
     );
-    setCarRows(updatedRows); // Correctly update the state
-    setLastSavedRow(newRowData); // Update the last saved row state
+    setCarRows(updatedRows);
+    setLastSavedRow(newRowData);
     return newRowData;
   };
 
@@ -236,7 +234,7 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     { field: "extras", headerName: "Extras", width: 200, editable: true },
-    ...(isLoggedIn // conditionally show actions for logged in user only
+    ...(isLoggedIn
       ? [
           {
             field: "actions",
@@ -244,7 +242,6 @@ export default function FullFeaturedCrudGrid() {
             headerName: "Actions",
             width: 100,
             getActions: (params) => {
-              // Check if user object exists in the row data
               const isOwner = params.row.user && params.row.user.id === userId;
 
               if (rowModesModel[params.id]?.mode === GridRowModes.Edit) {
@@ -310,6 +307,7 @@ export default function FullFeaturedCrudGrid() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={(error) => console.error(error)}
         initialState={{
           pagination: { paginationModel: { pageSize: 5 } },
         }}
