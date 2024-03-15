@@ -45,6 +45,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.loginReducer.isLoggedIn);
+  const loginError = useSelector((state) => state.loginReducer.loginError);
 
   // take the entered username, update the state
   const onChangeUsername = (event) => {
@@ -100,6 +101,11 @@ export default function LoginForm() {
         <Typography component="h1" variant="h5" fontWeight="bold">
           Sign in
         </Typography>
+        {loginError && (
+          <Typography color="error" align="center">
+            {loginError}
+          </Typography>
+        )}
         <Box
           component="form"
           onSubmit={onSubmit}
