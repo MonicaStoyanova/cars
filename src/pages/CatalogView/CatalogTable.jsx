@@ -10,18 +10,16 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowModes,
+  GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 
 import { useSelector, useDispatch } from "react-redux";
-import { createCar, deleteCar } from "./CatalogActions";
+import { createCar, deleteCar, editCar } from "./CatalogActions";
 import { useState, useEffect } from "react";
 
 function AddNewRecordToolbar(props) {
-  const { isLoggedIn } = useSelector((state) => state.loginReducer);
   const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
-
-  // if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
 
   // Handles adding the new record to the table
   const handleAddNewRecord = () => {
@@ -154,7 +152,17 @@ export default function FullFeaturedCrudGrid() {
           lastName,
         },
       };
-      dispatch(createCar(carDetails));
+      const existingCarIndex = cars.findIndex(
+        (car) => car.id === lastSavedRow.id
+      );
+
+      if (existingCarIndex !== -1) {
+        // If the car exists, dispatch an update action
+        dispatch(editCar(carDetails));
+      } else {
+        // If the car does not exist, dispatch the create action
+        dispatch(createCar(carDetails));
+      }
     }
   }, [lastSavedRow]);
 
@@ -243,12 +251,14 @@ export default function FullFeaturedCrudGrid() {
                 return [
                   <GridActionsCellItem
                     icon={<SaveIcon />}
+                    key="save"
                     label="Save"
                     onClick={handleSaveClick(params.id)}
                     color="inherit"
                   />,
                   <GridActionsCellItem
                     icon={<CancelIcon />}
+                    key="cancel"
                     label="Cancel"
                     onClick={handleCancelClick(params.id)}
                     color="inherit"
@@ -258,12 +268,14 @@ export default function FullFeaturedCrudGrid() {
                 return [
                   <GridActionsCellItem
                     icon={<EditIcon />}
+                    key="edit"
                     label="Edit"
                     onClick={handleEditClick(params.id)}
                     color="inherit"
                   />,
                   <GridActionsCellItem
                     icon={<DeleteIcon />}
+                    key="delete"
                     label="Delete"
                     onClick={handleDeleteClick(params.id)}
                     color="inherit"

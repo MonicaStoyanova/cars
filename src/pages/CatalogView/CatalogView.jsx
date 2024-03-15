@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Header from "../../components/Header/Header";
 import DataGridDemo from "./CatalogTable";
 import SearchAppBar from "../../components/Searchbar/Searchbar";
