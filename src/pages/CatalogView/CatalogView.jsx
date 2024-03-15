@@ -1,8 +1,9 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import Header from "../../components/Header/Header";
 import DataGridDemo from "./CatalogTable";
 
-import { useDispatch } from "react-redux";
 import { getAllCars } from "./CatalogActions";
 
 const CatalogView = () => {

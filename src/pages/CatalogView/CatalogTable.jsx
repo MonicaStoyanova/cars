@@ -15,9 +15,9 @@ import {
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createCar, deleteCar, editCar } from "./CatalogActions";
-import { useState, useEffect } from "react";
 
 function AddNewRecordToolbar(props) {
   const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
