@@ -21,7 +21,7 @@ function AddNewRecordToolbar(props) {
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
   const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
 
-  if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
+  // if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
 
   // Handles adding the new record to the table
   const handleAddNewRecord = () => {
@@ -235,39 +235,43 @@ export default function FullFeaturedCrudGrid() {
             type: "actions",
             headerName: "Actions",
             width: 100,
-            getActions: (params) => [
-              rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
-                <>
+            getActions: (params) => {
+              // Check if user object exists in the row data
+              const isOwner = params.row.user && params.row.user.id === userId;
+
+              if (rowModesModel[params.id]?.mode === GridRowModes.Edit) {
+                return [
                   <GridActionsCellItem
                     icon={<SaveIcon />}
                     label="Save"
                     onClick={handleSaveClick(params.id)}
                     color="inherit"
-                  />
+                  />,
                   <GridActionsCellItem
                     icon={<CancelIcon />}
                     label="Cancel"
                     onClick={handleCancelClick(params.id)}
                     color="inherit"
-                  />
-                </>
-              ) : (
-                <>
+                  />,
+                ];
+              } else if (isLoggedIn && isOwner) {
+                return [
                   <GridActionsCellItem
                     icon={<EditIcon />}
                     label="Edit"
                     onClick={handleEditClick(params.id)}
                     color="inherit"
-                  />
+                  />,
                   <GridActionsCellItem
                     icon={<DeleteIcon />}
                     label="Delete"
                     onClick={handleDeleteClick(params.id)}
                     color="inherit"
-                  />
-                </>
-              ),
-            ],
+                  />,
+                ];
+              }
+              return [];
+            },
           },
         ]
       : []),
