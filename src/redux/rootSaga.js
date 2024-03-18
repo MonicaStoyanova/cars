@@ -8,10 +8,12 @@ import {
   fetchAllCars,
   loginFetch,
   registerFetch,
+  updateCarFetch,
 } from "../api/urls";
 import getAllCarsSaga from "../pages/CatalogView/getAllCarsSaga";
 import createCarSaga from "../pages/CatalogView/createCarSaga";
 import deleteCarSaga from "../pages/CatalogView/deleteCarSaga";
+import editCarsSaga from "../pages/CatalogView/editCarSaga";
 
 function* rootSaga() {
   yield all([
@@ -20,7 +22,7 @@ function* rootSaga() {
     getAllCarsSaga(fetchAllCars),
     createCarSaga(createCarFetch),
     deleteCarSaga(deleteCarFetch),
-    //editCarSaga(editCarFetch),
+    editCarsSaga(updateCarFetch),
   ]);
 }
 export default rootSaga;

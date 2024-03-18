@@ -5,7 +5,7 @@ import { registerSuccess, registerError } from "./actions.js";
 import { loginRequest } from "../LoginView/LoginAction";
 
 export default function* registerSaga(registerFetch) {
-  // listens for reg request
+  // listens for register request
   while (true) {
     const registerRequest = yield take(REGISTER_REQUEST);
 

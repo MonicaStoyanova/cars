@@ -1,4 +1,5 @@
 import { put, takeEvery, call } from "redux-saga/effects";
+
 import { getAllCarsSuccess, getAllCarsError } from "./CatalogActions"; // Correct import paths
 import { GET_ALL_CARS_REQUEST } from "./types";
 import { fetchAllCars } from "../../api/urls";

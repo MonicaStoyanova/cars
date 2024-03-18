@@ -60,43 +60,11 @@ export function createCarError(errorMessage) {
 }
 
 // edit car
-export function editCar(
-  accessToken,
-  city,
-  color,
-  condition,
-  engineType,
-  extras,
-  gearBox,
-  horsePower,
-  id,
-  make,
-  mileage,
-  model,
-  price,
-  user,
-  year,
-  userId
-) {
+export function editCar(carDetails) {
   return {
     type: EDIT_CAR_REQUEST,
     payload: {
-      accessToken,
-      city,
-      color,
-      condition,
-      engineType,
-      extras,
-      gearBox,
-      horsePower,
-      id,
-      make,
-      mileage,
-      model,
-      price,
-      user,
-      year,
-      userId,
+      carDetails,
     },
   };
 }

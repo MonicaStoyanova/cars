@@ -1,97 +1,23 @@
 import { put, take, call } from "redux-saga/effects";
+
 import { EDIT_CAR_REQUEST } from "./types";
 import { editCarError, editCarSuccess } from "./CatalogActions";
+import { updateCarFetch } from "../../api/urls";
 
-export default function* getCarsSaga(updateCarFetch) {
+export default function* editCarsSaga() {
   while (true) {
-    const editCarRequest = yield take(EDIT_CAR_REQUEST);
-    if (editCarRequest.payload) {
-      const {
-        accessToken,
-        city,
-        color,
-        condition,
-        engineType,
-        extras,
-        gearBox,
-        horsePower,
-        id,
-        make,
-        mileage,
-        model,
-        price,
-        user,
-        year,
-        userId,
-      } = editCarRequest.payload;
+    const action = yield take(EDIT_CAR_REQUEST);
+    const { carDetails } = action.payload;
 
-      yield call(
-        editCar,
-        updateCarFetch,
-        accessToken,
-        city,
-        color,
-        condition,
-        engineType,
-        extras,
-        gearBox,
-        horsePower,
-        id,
-        make,
-        mileage,
-        model,
-        price,
-        user,
-        year,
-        userId
-      );
+    try {
+      const response = yield call(updateCarFetch, {
+        userId: carDetails.user.id,
+        carId: carDetails.id,
+        updateDetails: carDetails,
+      });
+      yield put(editCarSuccess(response));
+    } catch (error) {
+      yield put(editCarError(error.toString()));
     }
-  }
-}
-
-function* editCar(
-  updateCarFetch,
-  accessToken,
-  city,
-  color,
-  condition,
-  engineType,
-  extras,
-  gearBox,
-  horsePower,
-  id,
-  make,
-  mileage,
-  model,
-  price,
-  user,
-  year,
-  userId
-) {
-  let response;
-
-  try {
-    response = yield call(
-      updateCarFetch,
-      accessToken,
-      city,
-      color,
-      condition,
-      engineType,
-      extras,
-      gearBox,
-      horsePower,
-      id,
-      make,
-      mileage,
-      model,
-      price,
-      user,
-      year,
-      userId
-    );
-    yield put(editCarSuccess(response.data));
-  } catch (error) {
-    yield put(editCarError(error));
   }
 }

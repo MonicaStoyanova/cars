@@ -8,9 +8,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 //React & Redux
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { registerUser } from "./actions";
 import useAuthRedirect from "../../hooks/useAuthRedirect";
@@ -34,9 +34,7 @@ export default function SignUp() {
   const [isDisabled, setIsDisabled] = useState(true); // submit button
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const isLoggedIn = useSelector((state) => state.registerReducer.isLoggedIn);
   // handle user input
   const onChangeFirstName = (event) => {
     setFirstName(event.target.value);
@@ -53,20 +51,21 @@ export default function SignUp() {
   const onChangePassword = (event) => {
     setPassword(event.target.value);
   };
-  // enable the button only if all fields are filled out
+
+  // enable the button only if all fields are filled out and meet the length requirements
   useEffect(() => {
-    if (firstName && lastName && username && password) setIsDisabled(false);
+    const isUsernameValid = username.length > 2;
+    const isPasswordValid = password.length > 5;
+    const areFieldsFilled = firstName && lastName && username && password;
+
+    setIsDisabled(!(areFieldsFilled && isUsernameValid && isPasswordValid));
   }, [firstName, lastName, username, password]);
 
   const onSubmitRegistration = (event) => {
     event.preventDefault();
     dispatch(registerUser(firstName, lastName, username, password));
   };
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn]);
+
   return (
     <Container
       component="main"
@@ -148,6 +147,7 @@ export default function SignUp() {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                helperText="Username should be at least 3 characters long"
                 value={username}
                 onChange={onChangeUsername}
                 InputProps={{
@@ -168,6 +168,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                helperText="Password should be at least 6 characters long"
                 value={password}
                 onChange={onChangePassword}
                 InputProps={{

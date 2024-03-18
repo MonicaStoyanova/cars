@@ -8,20 +8,19 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   DataGrid,
   GridToolbarContainer,
+  GridToolbarQuickFilter,
   GridActionsCellItem,
   GridRowModes,
+  GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 
-import { useSelector, useDispatch } from "react-redux";
-import { createCar, deleteCar } from "./CatalogActions";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { createCar, deleteCar, editCar } from "./CatalogActions";
 
 function AddNewRecordToolbar(props) {
-  const { isLoggedIn } = useSelector((state) => state.loginReducer);
   const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
-
-  if (!isLoggedIn) return null; // If not logged in, don't render the button to add record
 
   // Handles adding the new record to the table
   const handleAddNewRecord = () => {
@@ -35,28 +34,33 @@ function AddNewRecordToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={handleAddNewRecord}
+      <Box
+        sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
-        Add record
-      </Button>
+        <Button
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAddNewRecord}
+        >
+          Add record
+        </Button>
+        <GridToolbarQuickFilter />{" "}
+      </Box>
     </GridToolbarContainer>
   );
 }
 
 export default function FullFeaturedCrudGrid() {
-  // we want the array of cars to appear as follows, top to be the users adds first
-  const { cars } = useSelector((state) => state.getCarsReducer); // we are taking the cars from the  database
+  const { cars } = useSelector((state) => state.getCarsReducer);
   const { isLoggedIn, userId, currentUser, password, firstName, lastName } =
-    useSelector((state) => state.loginReducer); // to conditionally render actions
+    useSelector((state) => state.loginReducer);
 
-  const [carRows, setCarRows] = useState([]); // the initial cars record from DB
+  const [carRows, setCarRows] = useState([]); // cars from DB
   const [rowModesModel, setNewRecordRow] = useState({}); //  lets you specify which rows are in "edit mode" and which are not, directly through the model
   const [lastSavedRow, setLastSavedRow] = useState(null);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     const sortedCars = [...cars].sort((a, b) => {
       const isAUser = a.user.id === userId;
@@ -87,7 +91,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleDeleteClick = (id) => () => {
     dispatch(deleteCar(id, userId));
-    setCarRows(cars.filter((row) => row.id !== id));
+    setCarRows(carRows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
@@ -103,7 +107,6 @@ export default function FullFeaturedCrudGrid() {
   };
   // Logic for getting user input when new record is added
   const processRowUpdate = async (newRowData) => {
-    // List of required fields
     const requiredFields = [
       "make",
       "model",
@@ -128,16 +131,15 @@ export default function FullFeaturedCrudGrid() {
     );
 
     if (!allFieldsFilled) {
-      // If not all fields are filled, alert the user and do not proceed with saving
       return alert("Please fill out all fields before saving.");
     }
 
     // If all fields are filled, proceed with updating the carRows and dispatching the action
-    const updatedRows = cars.map((row) =>
+    const updatedRows = carRows.map((row) =>
       row.id === newRowData.id ? { ...row, ...newRowData, isNew: false } : row
     );
-    setCarRows(updatedRows); // Correctly update the state
-    setLastSavedRow(newRowData); // Update the last saved row state
+    setCarRows(updatedRows);
+    setLastSavedRow(newRowData);
     return newRowData;
   };
 
@@ -154,7 +156,17 @@ export default function FullFeaturedCrudGrid() {
           lastName,
         },
       };
-      dispatch(createCar(carDetails));
+      const existingCarIndex = cars.findIndex(
+        (car) => car.id === lastSavedRow.id
+      );
+
+      if (existingCarIndex !== -1) {
+        // If the car exists, dispatch an update action
+        dispatch(editCar(carDetails));
+      } else {
+        // If the car does not exist, dispatch the create action
+        dispatch(createCar(carDetails));
+      }
     }
   }, [lastSavedRow]);
 
@@ -228,46 +240,53 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     { field: "extras", headerName: "Extras", width: 200, editable: true },
-    ...(isLoggedIn // conditionally show actions for logged in user only
+    ...(isLoggedIn
       ? [
           {
             field: "actions",
             type: "actions",
             headerName: "Actions",
             width: 100,
-            getActions: (params) => [
-              rowModesModel[params.id]?.mode === GridRowModes.Edit ? (
-                <>
+            getActions: (params) => {
+              const isOwner = params.row.user && params.row.user.id === userId;
+
+              if (rowModesModel[params.id]?.mode === GridRowModes.Edit) {
+                return [
                   <GridActionsCellItem
                     icon={<SaveIcon />}
+                    key="save"
                     label="Save"
                     onClick={handleSaveClick(params.id)}
                     color="inherit"
-                  />
+                  />,
                   <GridActionsCellItem
                     icon={<CancelIcon />}
+                    key="cancel"
                     label="Cancel"
                     onClick={handleCancelClick(params.id)}
                     color="inherit"
-                  />
-                </>
-              ) : (
-                <>
+                  />,
+                ];
+              } else if (isLoggedIn && isOwner) {
+                return [
                   <GridActionsCellItem
                     icon={<EditIcon />}
+                    key="edit"
                     label="Edit"
                     onClick={handleEditClick(params.id)}
                     color="inherit"
-                  />
+                  />,
                   <GridActionsCellItem
                     icon={<DeleteIcon />}
+                    key="delete"
                     label="Delete"
                     onClick={handleDeleteClick(params.id)}
                     color="inherit"
-                  />
-                </>
-              ),
-            ],
+                  />,
+                ];
+              }
+              return [];
+            },
           },
         ]
       : []),
@@ -294,6 +313,7 @@ export default function FullFeaturedCrudGrid() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={(error) => console.error(error)}
         initialState={{
           pagination: { paginationModel: { pageSize: 5 } },
         }}

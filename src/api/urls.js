@@ -64,7 +64,8 @@ export const createCarFetch = async (carDetails) => {
   return await response.json();
 };
 
-export const updateCarFetch = async (userId, carId, updateDetails) => {
+export const updateCarFetch = async (carDetails) => {
+  const { userId, carId, updateDetails } = carDetails;
   const updateCarUrl = UPDATE_CAR.replace("{userId}", userId).replace(
     "{id}",
     carId
