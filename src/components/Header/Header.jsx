@@ -1,17 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import { logout } from "../../pages/Logout/LogoutAction";
-
 import logo from "../../resources/cars.png";
-
-import styles from "./Header.module.css";
 
 const Header = () => {
   const { isLoggedIn, currentUser } = useSelector(
     (state) => state.loginReducer
   );
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -21,23 +22,39 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <div className={styles.container}>
-        <img src={logo} />
-        {isLoggedIn ? (
-          <>
-            <p> Hello, {currentUser}</p>
-            <button className={styles.button} onClick={handleLogout}>
-              LOGOUT
-            </button>
-          </>
-        ) : (
-          <button className={styles.button}>
-            <a href="/login">LOGIN</a>
-          </button>
-        )}
-      </div>
-    </header>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" sx={{ backgroundColor: "rgb(63, 81, 181)" }}>
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="logo"
+            sx={{ mr: 2 }}
+            onClick={() => navigate("/")}
+          >
+            <img src={logo} alt="logo" style={{ maxWidth: "150px" }} />
+          </IconButton>
+          <Typography
+            align="center"
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+          >
+            {isLoggedIn && `Hello, ${currentUser}`}
+          </Typography>
+          {isLoggedIn ? (
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
+          ) : (
+            <Button color="inherit" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 
