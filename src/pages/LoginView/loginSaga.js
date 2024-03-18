@@ -16,14 +16,21 @@ function* confirmUser(loginFetch, username, password) {
   // A Generator function, or normal function which either returns a Promise as result, or any other value.
   try {
     const response = yield call(loginFetch, username, password);
-    const user = {
-      id: response.user.id,
-      username: response.user.username,
-      firstName: response.user.firstName, // we will need it in order to say Hello, user
-      token: response.jwtToken,
-    };
-    yield put(loginSuccess(user));
-    localStorage.setItem("user", JSON.stringify(user));
+    if (!response.user || !response.jwtToken) {
+      // Dispatch the loginError action with a custom error message.
+      yield put(loginError("Invalid username or password."));
+    } else {
+      const user = {
+        id: response.user.id,
+        username: response.user.username,
+        firstName: response.user.firstName,
+        lastName: response.user.lastName,
+        password: response.user.password,
+        token: response.jwtToken,
+      };
+      yield put(loginSuccess(user));
+      localStorage.setItem("user", JSON.stringify(user));
+    }
   } catch (err) {
     yield put(loginError(err)); // put is like dispatch
   }

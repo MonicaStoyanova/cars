@@ -1,13 +1,21 @@
-import React from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import Header from "../../components/Header/Header";
 import DataGridDemo from "./CatalogTable";
-import SearchAppBar from "../../components/Searchbar/Searchbar";
+
+import { getAllCars } from "./CatalogActions";
 
 const CatalogView = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, []);
   return (
     <>
       <Header />
-      <SearchAppBar />
+
       <DataGridDemo />
     </>
   );

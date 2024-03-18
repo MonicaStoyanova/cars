@@ -5,8 +5,8 @@ import RegisterScreen from "./pages/RegisterView/RegisterView";
 import CatalogView from "./pages/CatalogView/CatalogView";
 
 import "./App.css";
+
 function App() {
-  // auth check
   return (
     <>
       <Routes>

@@ -11,9 +11,10 @@ import logo from "../../resources/cars.png";
 // React and Redux
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
+import useAuthRedirect from "../../hooks/useAuthRedirect";
 
 function Copyright() {
   return (
@@ -35,18 +36,18 @@ function Copyright() {
 }
 
 export default function LoginForm() {
+  useAuthRedirect();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true); // state for the submit button
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const isLoggedIn = useSelector((state) => state.loginReducer.isLoggedIn);
+  const { loginError } = useSelector((state) => state.loginReducer);
 
   // take the entered username, update the state
   const onChangeUsername = (event) => {
-    const username = event.target.value; // check if there is a username
+    const username = event.target.value;
     if (username !== "") setUsername(username);
   };
   // take the entered password, update the state
@@ -59,13 +60,7 @@ export default function LoginForm() {
     if (username && password) setIsDisabled(false);
   }, [username, password]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn]);
-
-  // on clicking submit, send the collected credentials (which we previously saved in the state) to trigger action
+  // on clicking Submit, send the collected credentials (which we previously saved in the state) to trigger action
   const onSubmit = (event) => {
     event.preventDefault();
     dispatch(loginRequest(username, password));
@@ -98,6 +93,11 @@ export default function LoginForm() {
         <Typography component="h1" variant="h5" fontWeight="bold">
           Sign in
         </Typography>
+        {loginError && (
+          <Typography color="error" align="center">
+            {loginError}
+          </Typography>
+        )}
         <Box
           component="form"
           onSubmit={onSubmit}
