@@ -8,15 +8,16 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   DataGrid,
   GridToolbarContainer,
+  GridToolbarQuickFilter,
   GridActionsCellItem,
   GridRowModes,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createCar, deleteCar, editCar } from "./CatalogActions";
-import { useState, useEffect } from "react";
 
 function AddNewRecordToolbar(props) {
   const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
@@ -33,13 +34,18 @@ function AddNewRecordToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={handleAddNewRecord}
+      <Box
+        sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
-        Add record
-      </Button>
+        <Button
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAddNewRecord}
+        >
+          Add record
+        </Button>
+        <GridToolbarQuickFilter />{" "}
+      </Box>
     </GridToolbarContainer>
   );
 }
@@ -85,7 +91,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleDeleteClick = (id) => () => {
     dispatch(deleteCar(id, userId));
-    setCarRows(cars.filter((row) => row.id !== id));
+    setCarRows(carRows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {

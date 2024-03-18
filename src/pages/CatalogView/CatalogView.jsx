@@ -1,8 +1,9 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import Header from "../../components/Header/Header";
 import DataGridDemo from "./CatalogTable";
-import SearchAppBar from "../../components/Searchbar/Searchbar";
-import { useDispatch } from "react-redux";
+
 import { getAllCars } from "./CatalogActions";
 
 const CatalogView = () => {
@@ -14,7 +15,7 @@ const CatalogView = () => {
   return (
     <>
       <Header />
-      <SearchAppBar />
+
       <DataGridDemo />
     </>
   );

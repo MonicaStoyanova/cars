@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import { logout } from "../../pages/Logout/LogoutAction";
 
 import logo from "../../resources/cars.png";
 
 import styles from "./Header.module.css";
-import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { isLoggedIn, currentUser } = useSelector(
     (state) => state.loginReducer
   );
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
