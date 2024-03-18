@@ -1,6 +1,7 @@
+import { put, take, call } from "redux-saga/effects";
+
 import { loginError, loginSuccess } from "./LoginAction";
 import { LOGIN_REQUEST } from "./types";
-import { put, take, call } from "redux-saga/effects";
 
 // after creating the actions, we have to give them to saga
 export default function* loginSaga(loginFetch) {

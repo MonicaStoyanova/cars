@@ -12,10 +12,10 @@ const CatalogView = () => {
   useEffect(() => {
     dispatch(getAllCars());
   }, []);
+
   return (
     <>
       <Header />
-
       <DataGridDemo />
     </>
   );

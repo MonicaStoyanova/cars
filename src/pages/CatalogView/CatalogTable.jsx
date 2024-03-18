@@ -18,6 +18,7 @@ import { randomId } from "@mui/x-data-grid-generator";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createCar, deleteCar, editCar } from "./CatalogActions";
+import { REQUIRED_FIELDS } from "../../utils/constants";
 
 function AddNewRecordToolbar(props) {
   const { setCarRows, setNewRecordRow } = props; // when we click add record the row that appears to insert values
@@ -107,23 +108,8 @@ export default function FullFeaturedCrudGrid() {
   };
   // Logic for getting user input when new record is added
   const processRowUpdate = async (newRowData) => {
-    const requiredFields = [
-      "make",
-      "model",
-      "year",
-      "engineType",
-      "gearBox",
-      "condition",
-      "horsePower",
-      "color",
-      "price",
-      "city",
-      "mileage",
-      "extras",
-    ];
-
     // Check if all required fields are filled
-    const allFieldsFilled = requiredFields.every(
+    const allFieldsFilled = REQUIRED_FIELDS.every(
       (field) =>
         newRowData[field] !== undefined &&
         newRowData[field] !== "" &&
@@ -184,6 +170,7 @@ export default function FullFeaturedCrudGrid() {
       type: "number",
       width: 100,
       editable: true,
+      valueParser: (value) => Math.max(1, value),
     },
     {
       field: "engineType",
@@ -215,6 +202,7 @@ export default function FullFeaturedCrudGrid() {
       type: "number",
       width: 130,
       editable: true,
+      valueParser: (value) => Math.max(1, value), // we specify that the number should be positive
     },
     { field: "color", headerName: "Color", width: 130, editable: true },
     {
@@ -223,6 +211,7 @@ export default function FullFeaturedCrudGrid() {
       type: "number",
       width: 130,
       editable: true,
+      valueParser: (value) => Math.max(0, value),
     },
     {
       field: "city",
@@ -248,7 +237,9 @@ export default function FullFeaturedCrudGrid() {
             headerName: "Actions",
             width: 100,
             getActions: (params) => {
-              const isOwner = params.row.user && params.row.user.id === userId;
+              const isOwner =
+                params.row.isNew ||
+                (params.row.user && params.row.user.id === userId); // if the record is new it is owner by the user
 
               if (rowModesModel[params.id]?.mode === GridRowModes.Edit) {
                 return [
