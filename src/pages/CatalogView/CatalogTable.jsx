@@ -91,7 +91,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleDeleteClick = (id) => () => {
     dispatch(deleteCar(id, userId));
-    setCarRows(cars.filter((row) => row.id !== id));
+    setCarRows(carRows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
