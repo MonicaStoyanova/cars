@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
 import useAuthRedirect from "../../hooks/useAuthRedirect";
+import { themeColors } from "../../theme/colors";
 
 function Copyright() {
   return (
@@ -97,7 +98,7 @@ export default function LoginForm() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            backgroundColor: themeColors.transparenWhite,
             padding: 3,
             borderRadius: 1,
             width: "100%",
@@ -132,7 +133,7 @@ export default function LoginForm() {
               InputProps={{
                 sx: {
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgb(15, 35, 140)",
+                    borderColor: themeColors.darkBlue,
                   },
                 },
               }}
@@ -152,7 +153,7 @@ export default function LoginForm() {
               InputProps={{
                 sx: {
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgb(15, 35, 140)",
+                    borderColor: themeColors.darkBlue,
                   },
                 },
               }}
@@ -166,9 +167,9 @@ export default function LoginForm() {
                 mt: 3,
                 mb: 2,
                 fontWeight: "bold",
-                backgroundColor: "rgb(15, 35, 140)",
+                backgroundColor: themeColors.darkBlue,
                 "&:hover": {
-                  backgroundColor: "rgb(38, 56, 147)", // hover color
+                  backgroundColor: themeColors.onHoverBlue, // hover color
                 },
               }}
               disabled={isDisabled}

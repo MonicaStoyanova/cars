@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import { logout } from "../../pages/Logout/LogoutAction";
 import logo from "../../resources/cars.png";
+import { themeColors } from "../../theme/colors";
 
 const Header = () => {
   const { isLoggedIn, currentUser } = useSelector(
@@ -23,7 +24,7 @@ const Header = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: "rgb(63, 81, 181)" }}>
+      <AppBar position="static" sx={{ backgroundColor: themeColors.darkBlue }}>
         <Toolbar>
           <IconButton
             size="large"
