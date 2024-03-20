@@ -98,7 +98,7 @@ export default function LoginForm() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            backgroundColor: themeColors.transparenWhite,
+            backgroundColor: themeColors.transparentWhite,
             padding: 3,
             borderRadius: 1,
             width: "100%",
