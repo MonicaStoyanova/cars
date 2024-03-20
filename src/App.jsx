@@ -1,12 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 
-//import LoginScreen from "./pages/LoginView/LoginView";
-//import RegisterScreen from "./pages/RegisterView/RegisterView";
+import LoginForm from "./pages/LoginView/LoginForm";
 import SignUp from "./pages/RegisterView/RegisterForm";
 import CatalogView from "./pages/CatalogView/CatalogView";
 
 import "./App.css";
-import LoginForm from "./pages/LoginView/LoginForm";
 
 function App() {
   return (
