@@ -12,7 +12,7 @@ const initialUserState = {
   accessToken: null,
 };
 
-export const loginReducer = (state = initialUserState, action) => {
+function loginReducer(state = initialUserState, action) {
   switch (action.type) {
     case LOGIN_SUCCESS:
       return {
@@ -42,4 +42,5 @@ export const loginReducer = (state = initialUserState, action) => {
     default:
       return state;
   }
-};
+}
+export default loginReducer;

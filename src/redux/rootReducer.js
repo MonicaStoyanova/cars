@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
-import { loginReducer } from "./loginReducer";
+
+import loginReducer from "./loginReducer";
 import registerReducer from "./registerReducer";
 import getCarsReducer from "./getCarsReducer";
 import editCarReducer from "./editCarReducer";
