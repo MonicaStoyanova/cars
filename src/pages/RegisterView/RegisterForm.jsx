@@ -15,6 +15,9 @@ import { Link } from "react-router-dom";
 import { registerUser } from "./actions";
 import useAuthRedirect from "../../hooks/useAuthRedirect";
 
+import backgroundImage from "../../resources/background/carSideMIrror.jpg";
+import { themeColors } from "../../theme/colors";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -67,147 +70,160 @@ export default function SignUp() {
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
+    <Box
       sx={{
+        height: "100vh",
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
       }}
     >
-      <CssBaseline />
-      <Box
+      <Container
+        component="main"
+        maxWidth="xs"
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          backgroundColor: "rgba(255, 255, 255, 0.7)",
-          padding: 3,
-          borderRadius: 1,
-          width: "100%",
+          justifyContent: "center",
+          height: "100vh",
         }}
       >
-        <Typography component="h1" variant="h5" fontWeight="bold">
-          Sign up
-        </Typography>
+        <CssBaseline />
         <Box
-          component="form"
-          noValidate
-          sx={{ mt: 3 }}
-          onSubmit={onSubmitRegistration}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            backgroundColor: themeColors.transparenWhite,
+            padding: 3,
+            borderRadius: 1,
+            width: "100%",
+          }}
         >
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                value={firstName}
-                onChange={onChangeFirstName}
-                autoFocus
-                InputProps={{
-                  sx: {
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "rgb(15, 35, 140)",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                value={lastName}
-                onChange={onChangeLastName}
-                autoComplete="family-name"
-                InputProps={{
-                  sx: {
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "rgb(15, 35, 140)",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                helperText="Username should be at least 3 characters long"
-                value={username}
-                onChange={onChangeUsername}
-                InputProps={{
-                  sx: {
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "rgb(15, 35, 140)",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                helperText="Password should be at least 6 characters long"
-                value={password}
-                onChange={onChangePassword}
-                InputProps={{
-                  sx: {
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "rgb(15, 35, 140)",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            disabled={isDisabled}
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: 3,
-              mb: 2,
-              fontWeight: "bold",
-              backgroundColor: "rgb(15, 35, 140)",
-              "&:hover": {
-                backgroundColor: "rgb(38, 56, 147)", // hover color
-              },
-            }}
+          <Typography component="h1" variant="h5" fontWeight="bold">
+            Sign up
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            sx={{ mt: 3 }}
+            onSubmit={onSubmitRegistration}
           >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="center">
-            <Grid item sx={{ mb: 1 }}>
-              <Link to={"/login"} variant="body2">
-                Already have an account? Sign in
-              </Link>
+            <Grid container spacing={4}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  value={firstName}
+                  onChange={onChangeFirstName}
+                  autoFocus
+                  InputProps={{
+                    sx: {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: themeColors.darkBlue,
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onChange={onChangeLastName}
+                  autoComplete="family-name"
+                  InputProps={{
+                    sx: {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: themeColors.darkBlue,
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  helperText="Username should be at least 3 characters long"
+                  value={username}
+                  onChange={onChangeUsername}
+                  InputProps={{
+                    sx: {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: themeColors.darkBlue,
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  helperText="Password should be at least 6 characters long"
+                  value={password}
+                  onChange={onChangePassword}
+                  InputProps={{
+                    sx: {
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: themeColors.darkBlue,
+                      },
+                    },
+                  }}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+            <Button
+              type="submit"
+              disabled={isDisabled}
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 3,
+                mb: 2,
+                fontWeight: "bold",
+                backgroundColor: themeColors.darkBlue,
+                "&:hover": {
+                  backgroundColor: themeColors.onHoverBlue, // hover color
+                },
+              }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="center">
+              <Grid item sx={{ mb: 1 }}>
+                <Link to={"/login"} variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+          <Copyright sx={{ mt: 4 }} />
         </Box>
-        <Copyright sx={{ mt: 4 }} />
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 }
