@@ -1,7 +1,7 @@
 import { LOGIN_ERROR, LOGIN_SUCCESS } from "../pages/LoginView/types";
 import { LOGOUT } from "../pages/Logout/types";
 // initialState in every reducer for readability
-const initialUserState = {
+export const initialUserState = {
   isLoggedIn: false,
   loginError: "",
   currentUser: false, //this is the username
