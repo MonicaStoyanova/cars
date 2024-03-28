@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
-import useAuthRedirect from "../../hooks/useAuthRedirect";
 import { themeColors } from "../../theme/colors";
 
 function Copyright() {
@@ -38,7 +37,6 @@ function Copyright() {
 }
 
 export default function LoginForm() {
-  useAuthRedirect();
   const usernameRef = useRef("");
   const passwordRef = useRef("");
 

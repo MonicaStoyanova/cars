@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { registerUser } from "./actions";
-import useAuthRedirect from "../../hooks/useAuthRedirect";
 
 import backgroundImage from "../../resources/background/carSideMIrror.jpg";
 import { themeColors } from "../../theme/colors";
@@ -29,7 +28,6 @@ function Copyright() {
 }
 
 export default function SignUp() {
-  useAuthRedirect();
   const firstNameRef = useRef("");
   const lastNameRef = useRef("");
   const usernameRef = useRef("");
