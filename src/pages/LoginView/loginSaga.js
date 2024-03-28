@@ -33,6 +33,6 @@ function* confirmUser(loginFetch, username, password) {
       localStorage.setItem("user", JSON.stringify(user));
     }
   } catch (err) {
-    yield put(loginError(err)); // put is like dispatch
+    yield put(loginError(err.toString()));
   }
 }

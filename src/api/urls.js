@@ -1,3 +1,4 @@
+// export const BASE_URL = "http://46.101.113.44:8080";
 export const BASE_URL = "http://localhost:8080";
 export const LOGIN_URL = `${BASE_URL}/users/login`;
 export const REGISTER_URL = `${BASE_URL}/users/register`;

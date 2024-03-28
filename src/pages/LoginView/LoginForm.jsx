@@ -10,12 +10,11 @@ import Container from "@mui/material/Container";
 import backgroundImage from "../../resources/background/carSideMIrror.jpg";
 import logo from "../../resources/cars.png";
 // React and Redux
-import { useState, useEffect } from "react";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { loginRequest } from "./LoginAction";
-import useAuthRedirect from "../../hooks/useAuthRedirect";
 import { themeColors } from "../../theme/colors";
 
 function Copyright() {
@@ -38,34 +37,23 @@ function Copyright() {
 }
 
 export default function LoginForm() {
-  useAuthRedirect();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isDisabled, setIsDisabled] = useState(true); // state for the submit button
+  const usernameRef = useRef("");
+  const passwordRef = useRef("");
 
   const dispatch = useDispatch();
 
   const { loginError } = useSelector((state) => state.loginReducer);
 
-  // take the entered username, update the state
-  const onChangeUsername = (event) => {
-    const username = event.target.value;
-    if (username !== "") setUsername(username);
-  };
-  // take the entered password, update the state
-  const onChangePassword = (event) => {
-    const password = event.target.value;
-    if (password !== "") setPassword(password);
-  };
-  // enable submit button if username and password are present
-  useEffect(() => {
-    if (username && password) setIsDisabled(false);
-  }, [username, password]);
-
-  // on clicking Submit, send the collected credentials (which we previously saved in the state) to trigger action
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(loginRequest(username, password));
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+
+    if (username && password) {
+      dispatch(loginRequest(username, password));
+    } else {
+      alert("Both fields are required");
+    }
   };
 
   return (
@@ -126,8 +114,7 @@ export default function LoginForm() {
               label="Username"
               name="username"
               autoComplete="username"
-              value={username}
-              onChange={onChangeUsername}
+              inputRef={usernameRef}
               autoFocus
               variant="outlined"
               InputProps={{
@@ -147,8 +134,7 @@ export default function LoginForm() {
               type="password"
               id="password"
               autoComplete="current-password"
-              value={password}
-              onChange={onChangePassword}
+              inputRef={passwordRef}
               variant="outlined"
               InputProps={{
                 sx: {
@@ -172,7 +158,6 @@ export default function LoginForm() {
                   backgroundColor: themeColors.onHoverBlue, // hover color
                 },
               }}
-              disabled={isDisabled}
             >
               Sign In
             </Button>

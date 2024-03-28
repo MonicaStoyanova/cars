@@ -7,13 +7,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 //React & Redux
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
 
 import { registerUser } from "./actions";
-import useAuthRedirect from "../../hooks/useAuthRedirect";
 
 import backgroundImage from "../../resources/background/carSideMIrror.jpg";
 import { themeColors } from "../../theme/colors";
@@ -29,44 +28,32 @@ function Copyright() {
 }
 
 export default function SignUp() {
-  useAuthRedirect();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isDisabled, setIsDisabled] = useState(true); // submit button
+  const firstNameRef = useRef("");
+  const lastNameRef = useRef("");
+  const usernameRef = useRef("");
+  const passwordRef = useRef("");
 
   const dispatch = useDispatch();
 
-  // handle user input
-  const onChangeFirstName = (event) => {
-    setFirstName(event.target.value);
-  };
-
-  const onChangeLastName = (event) => {
-    setLastName(event.target.value);
-  };
-
-  const onChangeUsername = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const onChangePassword = (event) => {
-    setPassword(event.target.value);
-  };
-
-  // enable the button only if all fields are filled out and meet the length requirements
-  useEffect(() => {
-    const isUsernameValid = username.length > 2;
-    const isPasswordValid = password.length > 5;
-    const areFieldsFilled = firstName && lastName && username && password;
-
-    setIsDisabled(!(areFieldsFilled && isUsernameValid && isPasswordValid));
-  }, [firstName, lastName, username, password]);
-
   const onSubmitRegistration = (event) => {
     event.preventDefault();
-    dispatch(registerUser(firstName, lastName, username, password));
+    const firstName = firstNameRef.current.value;
+    const lastName = lastNameRef.current.value;
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+
+    const isValid =
+      firstName && lastName && username.length > 2 && password.length > 5;
+
+    if (isValid) {
+      dispatch(registerUser(firstName, lastName, username, password));
+    } else if (username.length < 2) {
+      alert("Username must be at least 3 characters");
+    } else if (password.length < 5) {
+      alert("Password must be at least 6 characters");
+    } else {
+      alert("All fields are required");
+    }
   };
 
   return (
@@ -123,8 +110,7 @@ export default function SignUp() {
                   fullWidth
                   id="firstName"
                   label="First Name"
-                  value={firstName}
-                  onChange={onChangeFirstName}
+                  inputRef={firstNameRef}
                   autoFocus
                   InputProps={{
                     sx: {
@@ -142,8 +128,7 @@ export default function SignUp() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  value={lastName}
-                  onChange={onChangeLastName}
+                  inputRef={lastNameRef}
                   autoComplete="family-name"
                   InputProps={{
                     sx: {
@@ -162,9 +147,8 @@ export default function SignUp() {
                   label="Username"
                   name="username"
                   autoComplete="username"
-                  helperText="Username should be at least 3 characters long"
-                  value={username}
-                  onChange={onChangeUsername}
+                  helperText="Username must be at least 3 characters long"
+                  inputRef={usernameRef}
                   InputProps={{
                     sx: {
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -183,9 +167,8 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  helperText="Password should be at least 6 characters long"
-                  value={password}
-                  onChange={onChangePassword}
+                  helperText="Password must be at least 6 characters long"
+                  inputRef={passwordRef}
                   InputProps={{
                     sx: {
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -198,7 +181,6 @@ export default function SignUp() {
             </Grid>
             <Button
               type="submit"
-              disabled={isDisabled}
               fullWidth
               variant="contained"
               sx={{
