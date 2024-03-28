@@ -50,12 +50,12 @@ export default function LoginForm() {
   // take the entered username, update the state
   const onChangeUsername = (event) => {
     const username = event.target.value;
-    if (username !== "") setUsername(username);
+    setUsername(username);
   };
   // take the entered password, update the state
   const onChangePassword = (event) => {
     const password = event.target.value;
-    if (password !== "") setPassword(password);
+    setPassword(password);
   };
   // enable submit button if username and password are present
   useEffect(() => {
