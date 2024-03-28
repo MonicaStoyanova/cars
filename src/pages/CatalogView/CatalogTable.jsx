@@ -227,6 +227,7 @@ export default function FullFeaturedCrudGrid() {
       type: "number",
       width: 130,
       editable: true,
+      valueParser: (value) => Math.max(0, value),
     },
     { field: "extras", headerName: "Extras", width: 200, editable: true },
     ...(isLoggedIn
